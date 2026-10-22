@@ -1,0 +1,14 @@
+## Interface: 16001
+## Title: Hoard Forever
+## Notes: Instant search across your bags, bank, alts and guild vault, in one window.
+## Author: cjber
+## Version: @project-version@
+## Category: Inventory
+## IconTexture: Interface\AddOns\HoardForever\media\Icon
+## AddonCompartmentFunc: HoardForever_OnAddonCompartmentClick
+## X-License: GPL-3.0-or-later
+## X-Website: https://github.com/cjber/hoard-forever
+## SavedVariables: HoardForeverDB
+
+Locales\enUS.lua
+Core\Core.lua

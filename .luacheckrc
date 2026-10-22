@@ -1,0 +1,66 @@
+std = "lua51"
+max_line_length = 120
+exclude_files = {
+	"tools/.cache/**",
+	".release/**",
+	".types/**",
+	"types/**",
+	".claude/**",
+	"reference/**",
+}
+ignore = { "212/_.*" } -- unused arguments prefixed with _
+globals = {
+	"HoardForever",
+	"HoardForeverDB",
+	"HoardForever_OnAddonCompartmentClick",
+	"SLASH_HOARDFOREVER1",
+	"SLASH_HOARDFOREVER2",
+	"SlashCmdList",
+}
+read_globals = {
+	"BankFrame",
+	"CONTAINER_BAG_OFFSET",
+	"ContainerFrame_GetContainerNumSlots",
+	"CreateColor",
+	"CreateFrame",
+	"C_Container",
+	"C_GuildBank",
+	"C_Item",
+	"C_ItemLocation",
+	"C_Timer",
+	"Enum",
+	"GameFontHighlight",
+	"GameFontHighlightSmall",
+	"GameFontNormal",
+	"GameFontNormalLarge",
+	"GameFontNormalSmall",
+	"GameTooltip",
+	"GetLocale",
+	"GetMoneyString",
+	"GetRealmName",
+	"GetSortParams",
+	"GetGuildRosterInfo",
+	"GetNumGuildMembers",
+	"hooksecurefunc",
+	"InCombatLockdown",
+	"IsInGuild",
+	"ItemLocation",
+	"MenuUtil",
+	"PanelTemplates_DeselectTab",
+	"PanelTemplates_SelectTab",
+	"PanelTemplates_SetNumTabs",
+	"PanelTemplates_SetTab",
+	"PanelTemplates_TabResize",
+	"Settings",
+	"strlower",
+	"strtrim",
+	"UIParent",
+	"UISpecialFrames",
+	"UnitName",
+	"WOW_PROJECT_ID",
+	"WOW_PROJECT_MAINLINE",
+	"wipe",
+}
+
+-- A translation's lines are as long as its phrases.
+files["Locales/*.lua"] = { max_line_length = false }
