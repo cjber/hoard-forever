@@ -117,3 +117,4 @@ jobs:
         with:
           args: -d -z
       - run: python3 tools/check_package.py
+      - run: python3 tools/check_screenshots.py
