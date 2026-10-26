@@ -108,6 +108,8 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+      # check_package.py runs each spec over the packaged files, so the job needs the interpreter.
+      - run: sudo apt-get update && sudo apt-get install -y luajit
       - run: printf 'Package check\n' > .release-notes.md
       - name: Package this commit as an untagged build
         run: git tag --points-at HEAD | xargs -r git tag --delete
