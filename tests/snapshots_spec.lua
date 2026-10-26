@@ -34,3 +34,29 @@ assert(
 )
 
 print("snapshots_spec: ok")
+
+harness.env.C_GuildBank = {
+	GetNumGuildBankTabs = function()
+		return 1
+	end,
+	GetGuildBankTabInfo = function()
+		return { name = "Materials", isViewable = true }
+	end,
+	GetGuildBankNumSlots = function()
+		return 2
+	end,
+	GetGuildBankItemInfo = function(_, slot)
+		return slot == 1 and { count = 12 } or nil
+	end,
+	GetGuildBankItemLink = function(_, slot)
+		return slot == 1 and "item:77" or nil
+	end,
+}
+local guild = harness.ns.Snapshots.Guild("Guild-TestRealm")
+assert(#guild == 1 and guild[1].kind == "guild", "the open guild vault should produce guild records")
+assert(guild[1].itemID == 77 and guild[1].count == 12, "guild item links and stack counts should be cached")
+
+harness.env.C_GuildBank.GetNumGuildBankTabs = function()
+	error("vault unavailable")
+end
+assert(#harness.ns.Snapshots.Guild("Guild-TestRealm") == 0, "missing guild bank data should fail closed")

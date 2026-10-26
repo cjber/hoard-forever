@@ -1,4 +1,4 @@
-local _ = ...
+local _, ns = ...
 
 local function Register()
 	if not Settings or not Settings.RegisterCanvasLayoutCategory then
@@ -13,6 +13,12 @@ local function Register()
 	guild.Text:SetText("Cache the guild vault")
 	guild:SetScript("OnClick", function(self)
 		HoardForeverDB.settings.cacheGuild = self:GetChecked()
+		if self:GetChecked() and ns.RefreshGuild then
+			ns.RefreshGuild()
+		end
+		if ns.Rebuild then
+			ns.Rebuild()
+		end
 	end)
 	guild:SetChecked(HoardForeverDB.settings.cacheGuild)
 	local alts = CreateFrame("CheckButton", nil, panel, "InterfaceOptionsCheckButtonTemplate")

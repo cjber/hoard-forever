@@ -35,11 +35,41 @@ jobs:
       - run: uvx ruff@0.16.8 check tools
       - run: uvx ruff@0.16.8 format --check tools
 
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: sudo apt-get update && sudo apt-get install -y luajit
+      - name: Install LuaLS 3.19.1
+        run: |
+          curl -sSfL -o "$RUNNER_TEMP/luals.tar.gz" https://github.com/LuaLS/lua-language-server/releases/download/3.19.1/lua-language-server-3.19.1-linux-x64.tar.gz
+          echo "e9235d2d72ef55bc41cf8c99cda2ed64777682024b4bb81f5dea425060c5cbb8  $RUNNER_TEMP/luals.tar.gz" | sha256sum -c -
+          mkdir -p "$RUNNER_TEMP/luals"
+          tar -xzf "$RUNNER_TEMP/luals.tar.gz" -C "$RUNNER_TEMP/luals"
+          echo "$RUNNER_TEMP/luals/bin" >> "$GITHUB_PATH"
+      - run: tools/typecheck.sh
+      - run: lua-language-server --check . --checklevel=Information
+
+  sift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - env:
+          BASE: ${{ github.base_ref || github.event.repository.default_branch }}
+        run: python3 .sift/gate.py --base "origin/$BASE"
+      - run: python3 .sift/agents.py check
+
   changelog:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          # Every v* tag is a released version that needs its own CHANGELOG.md section.
           fetch-depth: 0
           persist-credentials: false
       - run: python3 tools/changelog.py --check
@@ -68,6 +98,8 @@ jobs:
           tar -xzf gitleaks.tar.gz gitleaks
       - run: ./gitleaks git --redact --no-banner .
 
+  # What a tag would ship, checked before it ships: the release workflow's packager without uploading or zipping,
+  # then tools/check_package.py on .release/ (every file the TOC loads, no development folders).
   package:
     runs-on: ubuntu-latest
     timeout-minutes: 30
