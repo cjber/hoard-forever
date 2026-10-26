@@ -1,12 +1,14 @@
-# The tooling scripts follow the Lua side's 120-column limit (stylua.toml, .luacheckrc).
+# The Python under tools/ generates the addon's data and runs CI's checks; it is never shipped (.pkgmeta ignores tools).
 line-length = 120
-target-version = "py311"
-# tools/wowmock is the suite's vendored screenshot library, copied verbatim; lint the addon's own script only.
-extend-exclude = ["tools/wowmock"]
+target-version = "py310"
+
+# Vendored byte for byte by sift setup; sift update refreshes them.
+extend-exclude = [".sift/gate.py", ".sift/agents.py"]
 
 [lint]
-select = ["E", "F", "I", "UP", "B", "EXE"]
+select = ["E", "F", "I", "UP", "B"]
 
 [lint.per-file-ignores]
-# Imports wowmock after putting its directory on sys.path.
-"tools/mockups.py" = ["E402"]
+# A one-shot script: it imports wowmock after putting its directory on sys.path, and its cached
+# methods live exactly as long as the process.
+"tools/screenshots.py" = ["E402", "B019"]
