@@ -35,11 +35,33 @@ jobs:
       - run: uvx ruff@0.16.8 check tools
       - run: uvx ruff@0.16.8 format --check tools
 
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: sudo apt-get update && sudo apt-get install -y luajit
+      - run: bash tools/typecheck.sh
+
+  sift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - env:
+          BASE: ${{ github.base_ref || github.event.repository.default_branch }}
+        run: python3 .sift/gate.py --base "origin/$BASE"
+      - run: python3 .sift/agents.py check
+
   changelog:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          # Every v* tag is a released version that needs its own CHANGELOG.md section.
           fetch-depth: 0
           persist-credentials: false
       - run: python3 tools/changelog.py --check
@@ -68,6 +90,8 @@ jobs:
           tar -xzf gitleaks.tar.gz gitleaks
       - run: ./gitleaks git --redact --no-banner .
 
+  # What a tag would ship, checked before it ships: the release workflow's packager without uploading or zipping,
+  # then tools/check_package.py on .release/ (every file the TOC loads, no development folders).
   package:
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -76,6 +100,8 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+      # check_package.py runs each spec over the packaged files, so the job needs the interpreter.
+      - run: sudo apt-get update && sudo apt-get install -y luajit
       - run: printf 'Package check\n' > .release-notes.md
       - name: Package this commit as an untagged build
         run: git tag --points-at HEAD | xargs -r git tag --delete

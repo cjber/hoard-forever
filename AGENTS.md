@@ -4,12 +4,14 @@ Hoard Forever targets the WoW: Forever client (Interface 16001). It is the suite
 answers where an item is and how many you have, across bags, bank, alts and the guild vault. It only reads. It never
 moves, sells, mails or uses an item, and it never touches a protected function.
 
-Read `forever-handoff/boundaries.md` in [cjber/forever-core](https://github.com/cjber/forever-core) before adding a
-feature: it says which addon owns what, and this file only says how to write code here.
+Read `docs/build-brief.md` for the product boundaries and the vault behavior before changing scope.
 
 ## Commands
 
 ```sh
+python3 .sift/gate.py --base origin/main
+python3 .sift/agents.py check
+python3 tools/typecheck.sh
 stylua --check .
 luacheck .
 for spec in tests/*_spec.lua; do luajit "$spec" || exit 1; done
@@ -42,6 +44,10 @@ Owns: searching containers and cached alt stashes, the window, and the saved per
 
 Never: craft, mail, sell or use an item, plan a route (`shortest-path-forever`), choose quests
 (`adventure-guide-forever`), price a recipe (`skillup-forever`), or draw a bag or bank window of its own.
+
+## Standards
+
+- `wow-forever-addon` — https://github.com/cjber/forever-core/tree/3fd1b7fe109e709c4952bb04622e94d05636585e/.agents/skills/wow-forever-addon (shared UI, icon, docs, CI and release requirements)
 
 ## Rules
 

@@ -13,6 +13,7 @@ ns.L = ns.L or setmetatable({}, {
 ns.DEFAULTS = {
 	window = { point = "CENTER", x = 0, y = 0, width = 720, height = 460 },
 	settings = { defaultTab = "All", cacheGuild = true, recordAlts = true },
+	guilds = {},
 }
 
 local defaults = ns.DEFAULTS
@@ -49,6 +50,58 @@ local function SaveSnapshot()
 	HoardForeverDB.chars[key] = previous
 end
 
+local guildBankOpen = false
+
+local function GuildKey()
+	local getGuildInfo = _G.GetGuildInfo
+	local guild = type(getGuildInfo) == "function" and getGuildInfo("player")
+	if type(guild) ~= "string" or guild == "" then
+		return nil
+	end
+	return guild .. "-" .. tostring(GetRealmName and GetRealmName() or "Unknown")
+end
+
+local function RefreshGuild()
+	if not guildBankOpen or not HoardForeverDB.settings.cacheGuild then
+		return
+	end
+	local guild = GuildKey()
+	if not guild then
+		return
+	end
+	local records = ns.Snapshots.Guild(guild)
+	HoardForeverDB.guilds[guild] = { items = records, updated = time() }
+end
+
+ns.RefreshGuild = RefreshGuild
+
+local function QueryGuildTabs()
+	local api = C_GuildBank
+	local fn = api and api.QueryGuildBankTab or _G.QueryGuildBankTab
+	local getTabs = api and api.GetNumGuildBankTabs or _G.GetNumGuildBankTabs
+	local getInfo = api and api.GetGuildBankTabInfo or _G.GetGuildBankTabInfo
+	if type(fn) ~= "function" or type(getTabs) ~= "function" then
+		return
+	end
+	local ok, tabs = pcall(getTabs)
+	if not ok or type(tabs) ~= "number" then
+		return
+	end
+	for tab = 1, tabs do
+		local infoOK, a, _, c = pcall(getInfo, tab)
+		local visible
+		if infoOK then
+			visible = type(a) == "table" and a.isViewable or c
+			if type(a) == "table" then
+				visible = a.isViewable
+			end
+		end
+		if visible ~= false then
+			pcall(fn, tab)
+		end
+	end
+end
+
 local function Rebuild()
 	local scan = ns.Snapshots.Scan()
 	HoardForeverDB.chars = HoardForeverDB.chars or {}
@@ -60,6 +113,13 @@ local function Rebuild()
 	end
 	old.updated = time()
 	HoardForeverDB.chars[current] = old
+	local guild = GuildKey()
+	local guildSnapshot = guild and HoardForeverDB.guilds[guild]
+	if HoardForeverDB.settings.cacheGuild and guildSnapshot then
+		for _, item in ipairs(guildSnapshot.items or {}) do
+			scan.records[#scan.records + 1] = item
+		end
+	end
 	for character, snapshot in pairs(HoardForeverDB.chars) do
 		if character ~= current and type(snapshot) == "table" then
 			for _, kind in ipairs({ "bags", "bank", "guild" }) do
@@ -95,12 +155,29 @@ frame:SetScript("OnEvent", function(_, event, arg)
 			"PLAYERBANKSLOTS_CHANGED",
 			"PLAYERBANKBAGSLOTS_CHANGED",
 			"GUILDBANK_UPDATE_TABS",
+			"GUILDBANKBAGSLOTS_CHANGED",
+			"GUILDBANK_ITEM_LOCK_CHANGED",
+			"GUILDBANKFRAME_OPENED",
+			"GUILDBANKFRAME_CLOSED",
 		}) do
 			frame:RegisterEvent(name)
 		end
 		frame:RegisterEvent("PLAYER_LOGOUT")
 	elseif event == "PLAYER_LOGOUT" then
 		SaveSnapshot()
+	elseif event == "GUILDBANKFRAME_OPENED" then
+		guildBankOpen = true
+		QueryGuildTabs()
+	elseif event == "GUILDBANKFRAME_CLOSED" then
+		guildBankOpen = false
+		Rebuild()
+	elseif
+		event == "GUILDBANK_UPDATE_TABS"
+		or event == "GUILDBANKBAGSLOTS_CHANGED"
+		or event == "GUILDBANK_ITEM_LOCK_CHANGED"
+	then
+		RefreshGuild()
+		Rebuild()
 	else
 		Rebuild()
 	end

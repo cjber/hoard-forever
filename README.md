@@ -16,7 +16,7 @@ It only reads. It never moves, sells, mails or uses an item.
 ## Features
 
 - **One search, every container.** Bags, the reagent bag, the bank and its reagent bank are read when the window opens and again when a container changes, so one name finds every stack instead of one bag's worth.
-- **Tabs.** `All`, `Bags`, `Bank`, `Alts` and `Guild` keep the query and switch the source. The Guild tab has no vault reading yet and stays empty until that is built.
+- **Tabs.** `All`, `Bags`, `Bank`, `Alts` and `Guild` keep the query and switch the source. The Guild tab shows a read-only snapshot after you open the guild vault; the cache is saved per guild.
 - **Counts per source.** A result shows the total and where the stacks sit, so a bank stack is not read as a bag one.
 - **Alts record themselves.** Each character writes its bags and bank when they change and at logout, with a timestamp on the reading, so an alt's stash is searchable without logging over to it.
 - **Filters in the search box.** `q:epic` for a quality, `t:weapon` for an item class and `ilvl:>200` for a level. A token the box does not recognise is searched as text, never refused.
@@ -38,7 +38,7 @@ The addon targets the WoW: Forever client, Interface 16001. It needs nothing els
 
 The addon compartment button opens it too, and `Esc` closes it.
 
-Settings > AddOns > Hoard Forever holds three things: **Cache the guild vault**, **Record this character for the Alts tab**, and a button to **Clear alt snapshots**.
+Settings > AddOns > Hoard Forever holds three options: **Cache the guild vault**, **Record this character for the Alts tab**, and a button to **Clear alt snapshots**.
 
 ## What it reads
 

@@ -1,0 +1,9 @@
+-- Every phrase Hoard Forever shows, with its English text. Locale files use this template.
+local _, ns = ...
+if GetLocale() ~= "enUS" then
+	return
+end
+local L = ns.L
+L["Hoard Forever"] = "Hoard Forever"
+L["Search your bags, bank, alts and guild vault."] = "Search your bags, bank, alts and guild vault."
+L["Type to search. Press Enter to link the first result."] = "Type to search. Press Enter to link the first result."
