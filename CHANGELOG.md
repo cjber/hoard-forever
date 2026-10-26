@@ -4,6 +4,14 @@ All notable changes to this addon are recorded here. The format follows Keep a C
 
 ## [Unreleased]
 
+### Added
+
+- **Guild vault snapshots now appear in search after the vault is opened.** Hoard keeps a read-only cache for the current guild so the Guild tab can show its items after you close the bank.
+
+### Changed
+
+- Shared tooling and CI now check the vendored forever_tools package, project profile and suite drift.
+
 - **The README and store page now match the rest of the Forever suite.** They carry the family block, the badges, the icon and the licence and credits sections every sibling has, and they describe only what this build does: bags, the reagent bag, the bank, cached alts and the search filters. The guild vault is not read yet, and the README says so.
 
 ## [0.1.0] - 2026-10-22

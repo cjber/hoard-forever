@@ -1,7 +1,5 @@
 Hoard Forever answers one question fast: where is that item? Type a name and it lists every place the item sits, on the character you are on and on every alt that has logged in since the addon was installed.
 
-![The Hoard Forever window with a search for linen cloth and its results split by source](https://raw.githubusercontent.com/cjber/hoard-forever/main/docs/screenshots/window.png)
-
 The window is the game's own frame, search box and tabs.
 
 ## Features
