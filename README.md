@@ -1,11 +1,11 @@
-<p align="center"><img src="https://raw.githubusercontent.com/cjber/hoard-forever/main/media/icon-400.png" width="96" alt=""></p>
+<p align="center"><img src="media/icon-400.png" width="96" alt=""></p>
 
 <h1 align="center">Hoard Forever</h1>
 
 <p align="center">
 Search your bags, bank and alts in one window.<br>
-<a href="https://github.com/cjber/hoard-forever/actions/workflows/ci.yml"><img src="https://github.com/cjber/hoard-forever/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-<a href="https://github.com/cjber/hoard-forever/releases/latest"><img src="https://img.shields.io/github/v/release/cjber/hoard-forever" alt="Latest release"></a>
+<a href="../../actions/workflows/ci.yml"><img src="../../actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+<a href="../../releases/latest"><img src="https://img.shields.io/github/v/release/cjber/hoard-forever" alt="Latest release"></a>
 <a href="https://ko-fi.com/cjber59408"><img src="https://img.shields.io/badge/Ko--fi-tip-ff5e5b?logo=ko-fi&logoColor=white" alt="Ko-fi"></a>
 </p>
 
