@@ -49,7 +49,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/luals"
           tar -xzf "$RUNNER_TEMP/luals.tar.gz" -C "$RUNNER_TEMP/luals"
           echo "$RUNNER_TEMP/luals/bin" >> "$GITHUB_PATH"
-      - run: tools/typecheck.sh
+      - run: bash tools/typecheck.sh
       - run: lua-language-server --check . --checklevel=Information
 
   sift:
