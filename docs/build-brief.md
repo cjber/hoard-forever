@@ -106,8 +106,8 @@ its key.
 - `media/icon.svg` from the family icon template, rendered with the skill's `render_icon.py` to `media/icon-400.png`
   and `media/Icon.tga` (64 px). Gold rounded frame, one centred emblem (a chest or a stack of crates, not a
   magnifying glass over a bag).
-- `tools/screenshots.py` renders `docs/screenshots/` with `wowmock` (skill `wow-mock-screenshots` on the same
-  branch): at least three scenes, `search.png` (a query with results across Bags and Bank), `alts.png` (the Alts tab
+- `tools/screenshots.py` renders `docs/screenshots/` with the shared renderer in `forever-core/tools/wowmock`
+  (set `FOREVER_CORE` to that checkout): at least three scenes, `search.png` (a query with results across Bags and Bank), `alts.png` (the Alts tab
   with three characters) and `empty.png` (a query with no results). Real item IDs, names and icons from the pinned
   build, with the window drawn from the addon's own constants. Open every rendered PNG at full resolution before
   committing it and fix anything clipped, overlapping or misaligned: a green hash check does not prove the picture
@@ -116,7 +116,7 @@ its key.
   and stay under 1,200 words.
 - `docs/curseforge.md`: the store description, under 600 words, with the same screenshots.
 - `CHANGELOG.md`: keep `## [0.1.0] - 2026-10-22` and rewrite the bullets to match what actually shipped.
-- `THIRD_PARTY.md`: keep it truthful. No third party code, no vendored data.
+- `THIRD_PARTY.md`: list the shared `forever-core` renderer and the Blizzard art fetched at render time. No client data is vendored.
 
 ## Tests
 

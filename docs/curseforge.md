@@ -41,3 +41,12 @@ Source: [github.com/cjber/hoard-forever](https://github.com/cjber/hoard-forever)
 The addon is free. If it saves you time, you can [buy me a coffee on Ko-fi](https://ko-fi.com/cjber59408).
 
 Built with AI assistance.
+
+
+## Screenshots
+
+![Search bags and bank](screenshots/search.png)
+
+![Search saved characters](screenshots/alts.png)
+
+![No matching items](screenshots/empty.png)

@@ -24,6 +24,18 @@ It only reads. It never moves, sells, mails or uses an item.
 - **Link a result.** `Enter` links the first result to chat; hold `Shift` and click any row to link that one instead.
 - **The client's own window.** Built from `PortraitFrameTemplate`, the game's search box and its tab buttons. No new art and no minimap button.
 
+### Search across your bags and bank
+
+![Matching items in bags and bank](docs/screenshots/search.png)
+
+### Search your logged characters
+
+![Item stacks across three saved characters](docs/screenshots/alts.png)
+
+### Nothing matches
+
+![An empty search result](docs/screenshots/empty.png)
+
 ## Install
 
 Download the zip from [Releases](https://github.com/cjber/hoard-forever/releases) and extract it into `_classic_beta_/Interface/AddOns/`, so you end up with `AddOns/HoardForever/HoardForever.toc`. After an update, `/reload`.
