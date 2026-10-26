@@ -4,6 +4,8 @@ All notable changes to this addon are recorded here. The format follows Keep a C
 
 ## [Unreleased]
 
+- **The README and store page now match the rest of the Forever suite.** They carry the family block, the badges, the icon and the licence and credits sections every sibling has, and they describe only what this build does: bags, the reagent bag, the bank, cached alts and the search filters. The guild vault is not read yet, and the README says so.
+
 ## [0.1.0] - 2026-10-22
 
 - **Search everything you own from one window.** Bags, reagent bag, bank, warband bank, the guild vault and your alts' cached stashes are indexed the moment the window opens, so a name finds every stack instead of one bag.
