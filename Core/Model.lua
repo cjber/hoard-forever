@@ -3,51 +3,9 @@ local _, ns = ...
 local Model = {}
 ns.Model = Model
 
-local function Fold(value)
-	value = tostring(value or "")
-	local replacements = {
-		["á"] = "a",
-		["à"] = "a",
-		["â"] = "a",
-		["ä"] = "a",
-		["ã"] = "a",
-		["Á"] = "a",
-		["À"] = "a",
-		["Â"] = "a",
-		["Ä"] = "a",
-		["Ã"] = "a",
-		["é"] = "e",
-		["è"] = "e",
-		["ê"] = "e",
-		["ë"] = "e",
-		["í"] = "i",
-		["ï"] = "i",
-		["É"] = "e",
-		["È"] = "e",
-		["Ê"] = "e",
-		["Ë"] = "e",
-		["Í"] = "i",
-		["Ï"] = "i",
-		["ó"] = "o",
-		["ô"] = "o",
-		["ö"] = "o",
-		["õ"] = "o",
-		["ú"] = "u",
-		["ü"] = "u",
-		["ç"] = "c",
-		["Ó"] = "o",
-		["Ô"] = "o",
-		["Ö"] = "o",
-		["Õ"] = "o",
-		["Ú"] = "u",
-		["Ü"] = "u",
-		["Ç"] = "c",
-	}
-	for from, to in pairs(replacements) do
-		value = value:gsub(from, to)
-	end
-	return value:lower()
-end
+-- Case- and accent-insensitive folding and match ranking are Forever Core's (Core/Text.lua), vendored byte for
+-- byte: one fold and one ranking for the whole suite instead of a per-addon table that disagreed with its siblings.
+local Fold = ns.Text.Fold
 
 function Model.Build(scan)
 	local grouped = {}
@@ -138,25 +96,7 @@ local function MatchSource(item, tab)
 end
 
 local function Rank(item, query)
-	local name = Fold(item.name)
-	if query == "" then
-		return 0
-	end
-	if name == query then
-		return 1
-	end
-	if name:sub(1, #query) == query then
-		return 2
-	end
-	for word in name:gmatch("%S+") do
-		if word:sub(1, #query) == query then
-			return 3
-		end
-	end
-	if name:find(query, 1, true) then
-		return 4
-	end
-	return nil
+	return ns.Text.Rank(Fold(item.name), query)
 end
 
 local function PassLevel(actual, filter)

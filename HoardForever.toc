@@ -12,9 +12,11 @@
 
 Locales\enUS.lua
 Core\Core.lua
+Core\Text.lua
 Core\Snapshots.lua
 Core\Model.lua
 Core\API.lua
+UI\SettingsPage.lua
 Core\Settings.lua
 UI\Results.lua
 UI\Window.lua

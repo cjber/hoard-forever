@@ -10,6 +10,8 @@ All notable changes to this addon are recorded here. The format follows Keep a C
 
 ### Changed
 
+- **Search folding and result ranking now come from Forever Core.** The addon's own accented-letter table is gone; `Core/Text.lua` folds the whole Latin-1 range once for the suite, so every accented item name matches. The settings page's chrome is Forever Core's shared `UI/SettingsPage.lua` too, with the same two options and the same button as before.
+
 - Shared tooling and CI now check the vendored forever_tools package, project profile and suite drift.
 
 - **The README and store page now match the rest of the Forever suite.** They carry the family block, the badges, the icon and the licence and credits sections every sibling has, and they describe only what this build does: bags, the reagent bag, the bank, cached alts and the search filters. The guild vault is not read yet, and the README says so.

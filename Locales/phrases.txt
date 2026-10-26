@@ -7,3 +7,6 @@ local L = ns.L
 L["Hoard Forever"] = "Hoard Forever"
 L["Search your bags, bank, alts and guild vault."] = "Search your bags, bank, alts and guild vault."
 L["Type to search. Press Enter to link the first result."] = "Type to search. Press Enter to link the first result."
+L["Cache the guild vault"] = "Cache the guild vault"
+L["Record this character for the Alts tab"] = "Record this character for the Alts tab"
+L["Clear alt snapshots"] = "Clear alt snapshots"

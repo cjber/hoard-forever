@@ -1,47 +1,36 @@
 local _, ns = ...
 
+-- The settings page's chrome -- the panel, its title, the rows that stack down it and the category registration -- is
+-- Forever Core's UI/SettingsPage.lua, vendored byte for byte. What stays here is Hoard's own two options, its one
+-- button, the phrases they show, and what each of them does to the saved variables.
 local function Register()
-	if not Settings or not Settings.RegisterCanvasLayoutCategory then
-		return
-	end
-	local panel = CreateFrame("Frame")
-	local title = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-	title:SetPoint("TOPLEFT", 16, -16)
-	title:SetText("Hoard Forever")
-	local guild = CreateFrame("CheckButton", nil, panel, "InterfaceOptionsCheckButtonTemplate")
-	guild:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -18)
-	guild.Text:SetText("Cache the guild vault")
-	guild:SetScript("OnClick", function(self)
-		HoardForeverDB.settings.cacheGuild = self:GetChecked()
-		if self:GetChecked() and ns.RefreshGuild then
-			ns.RefreshGuild()
-		end
-		if ns.Rebuild then
-			ns.Rebuild()
-		end
-	end)
-	guild:SetChecked(HoardForeverDB.settings.cacheGuild)
-	local alts = CreateFrame("CheckButton", nil, panel, "InterfaceOptionsCheckButtonTemplate")
-	alts:SetPoint("TOPLEFT", guild, "BOTTOMLEFT", 0, -8)
-	alts.Text:SetText("Record this character for the Alts tab")
-	alts:SetScript("OnClick", function(self)
-		HoardForeverDB.settings.recordAlts = self:GetChecked()
-	end)
-	alts:SetChecked(HoardForeverDB.settings.recordAlts)
-	local clear = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
-	clear:SetSize(180, 24)
-	clear:SetPoint("TOPLEFT", alts, "BOTTOMLEFT", 0, -14)
-	clear:SetText("Clear alt snapshots")
-	clear:SetScript("OnClick", function()
-		local current = UnitName("player") .. "-" .. GetRealmName()
-		for key in pairs(HoardForeverDB.chars) do
-			if key ~= current then
-				HoardForeverDB.chars[key] = nil
+	local _, panel = ns.SettingsPage.Register("Hoard Forever", function(target, page)
+		page.AddCheck(target, "Cache the guild vault", function()
+			return HoardForeverDB.settings.cacheGuild
+		end, function(checked)
+			HoardForeverDB.settings.cacheGuild = checked
+			if checked and ns.RefreshGuild then
+				ns.RefreshGuild()
 			end
-		end
+			if ns.Rebuild then
+				ns.Rebuild()
+			end
+		end)
+		page.AddCheck(target, "Record this character for the Alts tab", function()
+			return HoardForeverDB.settings.recordAlts
+		end, function(checked)
+			HoardForeverDB.settings.recordAlts = checked
+		end)
+		page.AddButton(target, "Clear alt snapshots", function()
+			local current = UnitName("player") .. "-" .. GetRealmName()
+			for key in pairs(HoardForeverDB.chars) do
+				if key ~= current then
+					HoardForeverDB.chars[key] = nil
+				end
+			end
+		end)
 	end)
-	local category = Settings.RegisterCanvasLayoutCategory(panel, "Hoard Forever")
-	Settings.RegisterAddOnCategory(category)
+	return panel
 end
 
 if C_Timer and C_Timer.After then
