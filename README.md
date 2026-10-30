@@ -88,7 +88,7 @@ for spec in tests/*_spec.lua; do luajit "$spec" || exit 1; done
 
 ## Credits
 
-Made by cjber. Blizzard Entertainment for the game, its item and container APIs and the window templates the addon is built from. The WoW: Forever project for the client it is written for. [THIRD_PARTY.md](THIRD_PARTY.md) lists every input.
+Made by cjber. Blizzard Entertainment for the game, its item and container APIs and the window templates the addon is built from. The WoW: Forever project for the client it is written for. Thanks to everyone who reports a bug or asks for a feature, here or on CurseForge. [THIRD_PARTY.md](THIRD_PARTY.md) lists every input and the full credits.
 
 World of Warcraft is a trademark of Blizzard Entertainment, Inc. This addon is not affiliated with or endorsed by Blizzard Entertainment.
 
