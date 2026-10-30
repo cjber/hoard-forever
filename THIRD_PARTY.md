@@ -7,6 +7,10 @@ local cache; only the rendered documentation images are committed.
 
 ## Ideas and contributors
 
-| Idea or report | From |
-|---|---|
-| A standalone search across bags, bank, alts and the guild vault | Cillian Berragan (`cjber`) |
+Credit for the ideas and reports behind the addon.
+
+| Who | What | Notes |
+|---|---|---|
+| cjber | Asked for a standalone search across bags, bank, alts and the guild vault | |
+
+Thanks also to everyone else who reported a bug or asked for a feature, here or on CurseForge.
