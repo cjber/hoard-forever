@@ -4,6 +4,8 @@ All notable changes to this addon are recorded here. The format follows Keep a C
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-30
+
 - **The README credits the people behind the addon.** Its Credits section thanks everyone who reports a bug or asks for a feature, and THIRD_PARTY.md's Ideas and contributors table now has the shape the other Forever addons use, so a player whose report is built is credited the same way in every addon.
 
 ## [0.1.0] - 2026-10-26
