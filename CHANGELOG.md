@@ -4,6 +4,8 @@ All notable changes to this addon are recorded here. The format follows Keep a C
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-11-02
+
 - **The bank is the bank, and the reagent bag is carried.** On the Forever client the bank scan read the keyring as the bank and counted the reagent bag among the bank tabs, while the reagent bag was missing from Bags; the scan now takes its containers from the client's own `Enum.BagIndex`, and falls back to the same numbers on a client without it. Nothing else about a snapshot changed, so saved readings still load.
 - **The type check runs the type checker.** CI's typecheck job installed no language server, so `tools/typecheck.sh` stopped after the tooling checks and never checked a type. The job now pins lua-language-server 3.19.1 and the `types/` declarations it needs, and any diagnostic fails the build.
 - **Choose the tab the window opens on.** Settings > AddOns > Hoard Forever has an Open on tab option, and the window now opens on it. The setting was saved but never read, so the window always started on whatever tab was last left selected.
