@@ -70,4 +70,4 @@ Never: craft, mail, sell or use an item, plan a route (`shortest-path-forever`),
 
 Keep changes under an appropriate `CHANGELOG.md` version heading, run the full gate, and check the packaged TOC
 contents before releasing. The BigWigs packager reads `.pkgmeta`, substitutes the release version in the TOC, and
-publishes the changelog entry as release notes. Commit without `-s`; signing is handled by GitHub.
+publishes the changelog entry as release notes. Sign commits with `git commit -S`; do not add `-s` sign-off lines.
