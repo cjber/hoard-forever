@@ -9,6 +9,8 @@ function Results.Render(parent, items)
 	for _, row in ipairs(parent.rows) do
 		row:Hide()
 	end
+	-- The list is a scroll child: its height is what lets the scroll frame reach rows past the visible area.
+	parent:SetHeight(math.max(1, #items * 52))
 	for index, item in ipairs(items) do
 		local row = parent.rows[index]
 		if not row then
@@ -26,7 +28,10 @@ function Results.Render(parent, items)
 			row:SetScript("OnClick", function(self)
 				if IsShiftKeyDown() and self.item.link then
 					ChatEdit_InsertLink(self.item.link)
-				elseif GameTooltip then
+				end
+			end)
+			row:SetScript("OnEnter", function(self)
+				if GameTooltip then
 					GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 					GameTooltip:SetHyperlink(self.item.link or ("item:" .. self.item.itemID))
 					GameTooltip:Show()

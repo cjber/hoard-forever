@@ -68,7 +68,10 @@ function Snapshots.Scan()
 	local bankOpen = BankFrame and BankFrame:IsShown()
 	if bankOpen then
 		scan.bank = {}
-		for container = -1, NUM_BANKGENERAL_SLOTS or 0 do
+		-- The bank is container -1 plus the bank bags, which are numbered after the carried bags 0 to NUM_BAG_SLOTS.
+		Append(scan.bank, ReadContainer(-1, "bank"))
+		local firstBankBag = (NUM_BAG_SLOTS or 4) + 1
+		for container = firstBankBag, firstBankBag + (NUM_BANKBAGSLOTS or 6) - 1 do
 			Append(scan.bank, ReadContainer(container, "bank"))
 		end
 		local reagent = Enum and Enum.BagIndex and Enum.BagIndex.Reagentbank

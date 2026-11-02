@@ -37,7 +37,7 @@ def scene(ui, query, tab, rows, empty=False):
     canvas.text(x + 41, y + 57, query, FONTS["GameFontHighlightSmall"], box_height=20)
     panel_tabs(canvas, x + 18, y + 82, ["All", "Bags", "Bank", "Alts", "Guild"], tab)
 
-    list_x, list_y, list_w = x + 28, y + 142, w - 56
+    list_x, list_y, list_w = x + 28, y + 142, w - 78
     if empty:
         canvas.text(list_x + 8, list_y + 8, f"No items found for “{query}”.", FONTS["GameFontDisableSmall"])
     else:

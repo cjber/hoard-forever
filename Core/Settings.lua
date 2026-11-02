@@ -28,6 +28,9 @@ local function Register()
 					HoardForeverDB.chars[key] = nil
 				end
 			end
+			if ns.Rebuild then
+				ns.Rebuild()
+			end
 		end)
 	end)
 	return panel

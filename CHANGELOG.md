@@ -4,6 +4,13 @@ All notable changes to this addon are recorded here. The format follows Keep a C
 
 ## [Unreleased]
 
+- **Opening the bank no longer doubles what you carry.** The bank scan read the backpack and bags along with the bank, so every carried stack counted twice while the bank was open. It now reads the bank and its bank bags only.
+- **Guild vault items stay on the Guild tab.** They no longer also appear under `Alts`.
+- **Turning off "Record this character for the Alts tab" stops the saving.** The character's bags were still written to the saved file on every change; now they are only indexed for this session.
+- **A long result list scrolls.** Rows past the fifth used to draw below the window; the list now scrolls, and the status reads "1 result." for a single match.
+- **Hovering a result shows the item tooltip.** Clicking is no longer needed to see it.
+- **Clearing alt snapshots updates the window at once.** Cleared alts used to stay listed until the next bag change.
+
 ## [0.1.1] - 2026-10-30
 
 - **The README credits the people behind the addon.** Its Credits section thanks everyone who reports a bug or asks for a feature, and THIRD_PARTY.md's Ideas and contributors table now has the shape the other Forever addons use, so a player whose report is built is credited the same way in every addon.

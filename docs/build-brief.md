@@ -32,7 +32,7 @@ installed, and nothing else may depend on it.
 | Source | How it is read | Notes |
 |---|---|---|
 | Bags | `C_Container.GetContainerNumSlots` and `GetContainerItemInfo`, containers 0..4 plus `BACKPACK_CONTAINER` | include the reagent bag when the client has one |
-| Bank | bank containers from `BANK_CONTAINER` (-1) through `NUM_BANKGENERAL_SLOTS`, plus the reagent bank | only readable while the bank is open |
+| Bank | `BANK_CONTAINER` (-1) and the bank bags after the carried bags (`NUM_BAG_SLOTS + 1` to `NUM_BAG_SLOTS + NUM_BANKBAGSLOTS`), plus the reagent bank | only readable while the bank is open |
 | Warband bank | only if the client exposes it; probe with `pcall` and hide the source when absent | never fake it |
 | Guild vault | `C_GuildBank.GetGuildBankItemInfo(tab, slot)` while the vault is open, cached per guild | the cache survives the vault closing |
 | Alts | the SavedVariables snapshot each character writes on container change and at logout | timestamped, keyed `Name-Realm` |
