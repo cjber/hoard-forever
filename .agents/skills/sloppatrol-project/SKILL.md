@@ -1,15 +1,15 @@
 ---
-name: sift-project
-description: Project profile for Sift quality gates in Hoard Forever.
+name: sloppatrol-project
+description: Project profile for Sloppatrol quality gates in Hoard Forever.
 ---
 
-# Sift project profile: Hoard Forever
+# Sloppatrol project profile: Hoard Forever
 
 Hoard Forever targets WoW: Forever (Interface 16001). The addon reads item data through client APIs and keeps each character's bag and bank snapshots plus the guild cache in saved variables. The addon is read-only: it never moves, sells, mails or uses items.
 
 ## Gate
 
-Run from the repository root: `stylua --check .`, `luacheck .`, every `tests/*_spec.lua` with LuaJIT, Ruff 0.16.8 on `tools`, `python3 tools/changelog.py --check`, `python3 tools/typecheck.sh`, then `.sift/gate.py --base origin/main` and `.sift/agents.py check`.
+Run from the repository root: `stylua --check .`, `luacheck .`, every `tests/*_spec.lua` with LuaJIT, Ruff 0.16.8 on `tools`, `python3 tools/changelog.py --check`, `python3 tools/typecheck.sh`, then `.sloppatrol/gate.py --base origin/main` and `.sloppatrol/agents.py check`.
 
 ## Live roots
 

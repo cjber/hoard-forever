@@ -9,8 +9,8 @@ Read `docs/build-brief.md` for the product boundaries and the vault behavior bef
 ## Commands
 
 ```sh
-python3 .sift/gate.py --base origin/main
-python3 .sift/agents.py check
+python3 .sloppatrol/gate.py --base origin/main
+python3 .sloppatrol/agents.py check
 bash tools/typecheck.sh
 stylua --check .
 luacheck .
