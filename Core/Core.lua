@@ -122,7 +122,7 @@ local function Rebuild()
 					for key, value in pairs(item) do
 						copy[key] = value
 					end
-					copy.kind, copy.character = kind, character
+					copy.kind, copy.character, copy.updated = kind, character, snapshot.updated
 					scan.records[#scan.records + 1] = copy
 				end
 			end

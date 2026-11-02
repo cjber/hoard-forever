@@ -39,6 +39,7 @@ read_globals = {
 	"GameFontNormalSmall",
 	"GameTooltip",
 	"GetLocale",
+	"GRAY_FONT_COLOR",
 	"time",
 	"NUM_BAG_SLOTS",
 	"NUM_BANKBAGSLOTS",
