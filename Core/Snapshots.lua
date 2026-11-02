@@ -60,23 +60,49 @@ local function Append(into, from)
 	end
 end
 
-function Snapshots.Scan()
-	local scan = { bags = {}, bank = nil }
-	for container = 0, 4 do
-		Append(scan.bags, ReadContainer(container, "bags"))
+-- The Forever client's Enum.BagIndex names the containers: Keyring = -1, Characterbanktab = -2, ReagentBag = 5 and
+-- CharacterBankTab_1..9 = 6..14, with no Reagentbank. It never reads the keyring as the bank. The numbers below are
+-- the same values, for a client whose Enum has no name for one of them.
+local BACKPACK, BAG_SLOTS = 0, 4
+local REAGENT_BAG = 5
+local BANK_CONTAINER, BANK_TAB_COUNT = -1, 9
+local FIRST_BANK_TAB = 6
+
+-- One container id by enum name, falling back to the value the Forever client uses when the enum is absent or has
+-- no such name.
+---@param index table<string, any>? the client's Enum.BagIndex
+---@param name string
+---@param fallback integer
+---@return integer
+local function ContainerID(index, name, fallback)
+	local value = index and index[name]
+	if type(value) == "number" then
+		return value
 	end
+	return fallback
+end
+
+function Snapshots.Scan()
+	local index = Enum and Enum.BagIndex
+	local scan = { bags = {}, bank = nil }
+	-- The backpack and the setup bags, then the reagent bag as one more carried bag.
+	for slot = BACKPACK, NUM_BAG_SLOTS or BAG_SLOTS do
+		Append(scan.bags, ReadContainer(slot, "bags"))
+	end
+	Append(scan.bags, ReadContainer(ContainerID(index, "ReagentBag", REAGENT_BAG), "bags"))
 	local bankOpen = BankFrame and BankFrame:IsShown()
 	if bankOpen then
 		scan.bank = {}
-		-- The bank is container -1 plus the bank bags, which are numbered after the carried bags 0 to NUM_BAG_SLOTS.
-		Append(scan.bank, ReadContainer(-1, "bank"))
-		local firstBankBag = (NUM_BAG_SLOTS or 4) + 1
-		for container = firstBankBag, firstBankBag + (NUM_BANKBAGSLOTS or 6) - 1 do
-			Append(scan.bank, ReadContainer(container, "bank"))
+		-- The character bank and its tabs, which the enum numbers after the reagent bag.
+		Append(scan.bank, ReadContainer(ContainerID(index, "Characterbanktab", BANK_CONTAINER), "bank"))
+		-- The enum names nine bank tabs; a client without the enum reports how many it has.
+		local bankTabs = NUM_BANKBAGSLOTS or BANK_TAB_COUNT
+		if index or bankTabs > BANK_TAB_COUNT then
+			bankTabs = BANK_TAB_COUNT
 		end
-		local reagent = Enum and Enum.BagIndex and Enum.BagIndex.Reagentbank
-		if reagent then
-			Append(scan.bank, ReadContainer(reagent, "bank"))
+		for tab = 1, bankTabs do
+			local fallback = FIRST_BANK_TAB + tab - 1
+			Append(scan.bank, ReadContainer(ContainerID(index, "CharacterBankTab_" .. tab, fallback), "bank"))
 		end
 	end
 	local records = {}

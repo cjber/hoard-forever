@@ -33,23 +33,95 @@ assert(
 	"snapshots should round trip through flat saved values"
 )
 
--- With the bank open, the carried bags 0 to 4 are read once, as bags, and the bank is -1 plus bags 5 to 10.
-local read = {}
+-- The Forever client's Enum.BagIndex, in full: the keyring is -1, the character bank is -2, the reagent bag is 5 and
+-- the character bank tabs run 6 to 14. There is no Reagentbank.
+local FOREVER_BAG_INDEX = {
+	Keyring = -1,
+	Characterbanktab = -2,
+	Backpack = 0,
+	Bag_1 = 1,
+	Bag_2 = 2,
+	Bag_3 = 3,
+	Bag_4 = 4,
+	ReagentBag = 5,
+	CharacterBankTab_1 = 6,
+	CharacterBankTab_2 = 7,
+	CharacterBankTab_3 = 8,
+	CharacterBankTab_4 = 9,
+	CharacterBankTab_5 = 10,
+	CharacterBankTab_6 = 11,
+	CharacterBankTab_7 = 12,
+	CharacterBankTab_8 = 13,
+	CharacterBankTab_9 = 14,
+}
+
+-- The container the Forever client keeps the reagent bag in, which the carried bags now include.
+local REAGENT_BAG = 5
+
+-- Every container the scan asks about, with how many times it was read, and one slot of item in each: the item id
+-- records which container produced it.
+local function Record()
+	local read = {}
+	harness.env.C_Container.GetContainerNumSlots = function(container)
+		read[container] = (read[container] or 0) + 1
+		return 1
+	end
+	harness.env.C_Container.GetContainerItemInfo = function(container)
+		return { itemID = 200 + container, stackCount = 1, hyperlink = "item:" .. (200 + container) }
+	end
+	return read
+end
+
+local function Scanned(records)
+	local ids = {}
+	for _, record in ipairs(records) do
+		ids[record.itemID - 200] = true
+	end
+	return ids
+end
+
+-- A client with no Enum at all: the carried bags are 0 to NUM_BAG_SLOTS, the reagent bag follows them, and the bank is
+-- -1 plus NUM_BANKBAGSLOTS bank bags numbered from 6.
+harness.env.Enum = nil
 harness.env.NUM_BAG_SLOTS, harness.env.NUM_BANKBAGSLOTS = 4, 6
 harness.env.BankFrame = harness.env.CreateFrame("Frame", "BankFrame")
-harness.env.C_Container.GetContainerNumSlots = function(container)
-	read[container] = (read[container] or 0) + 1
-	return 1
+local plain = Record()
+local plainScan = harness.ns.Snapshots.Scan()
+assert(#plainScan.bags == 6 and #plainScan.bank == 7, "an open bank should not count the carried bags again")
+assert(plain[5] == 1, "the reagent bag is a carried bag")
+for container = 0, 11 do
+	assert(plain[container] == 1, "container " .. container .. " should be read exactly once")
 end
-harness.env.C_Container.GetContainerItemInfo = function(container)
-	return { itemID = 200 + container, stackCount = 1, hyperlink = "item:" .. (200 + container) }
-end
+assert(plain[12] == nil, "nothing past the last bank bag should be read")
+assert(plain[-1] == 1, "a client without the enum keeps its own bank container")
+assert(plain[-2] == nil, "the enum's character bank is not read on a client without the enum")
+
+-- Bag-only, and on the Forever client: the reagent bag is read with the carried bags, and no bank is read at all.
+harness.env.BankFrame:Hide()
+harness.env.Enum = { BagIndex = FOREVER_BAG_INDEX }
+local closed = Record()
+local closedScan = harness.ns.Snapshots.Scan()
+assert(closedScan.bank == nil, "a closed bank should not appear as an empty source")
+assert(#closedScan.bags == 6, "the backpack, the setup bags and the reagent bag are the carried bags")
+assert(closed[5] == 1 and closed[-2] == nil, "a closed bank is never read")
+assert(Scanned(closedScan.bags)[REAGENT_BAG] == true, "the reagent bag's item is a bag item")
+-- With the Forever bank open: the character bank is Enum.BagIndex.Characterbanktab (-2) and its tabs are 6 to 14. The
+-- keyring (-1) is not the bank.
+harness.env.BankFrame:Show()
+local booked = Record()
 local open = harness.ns.Snapshots.Scan()
-assert(#open.bags == 5 and #open.bank == 7, "an open bank should not count the carried bags again")
-for container = -1, 10 do
-	assert(read[container] == 1, "container " .. container .. " should be read exactly once")
+assert(#open.bags == 6 and #open.bank == 10, "the bank is the character bank plus nine bank tabs")
+assert(booked[-1] == nil, "the keyring is never read as the bank")
+assert(booked[-2] == 1, "the character bank is read once, through the enum")
+for container = 0, 14 do
+	assert(booked[container] == 1, "container " .. container .. " should be read exactly once")
 end
-assert(read[11] == nil, "nothing past the last bank bag should be read")
+assert(booked[15] == nil, "nothing past the last bank tab should be read")
+assert(
+	Scanned(open.bank)[-2] == true and Scanned(open.bank)[14] == true,
+	"the bank reads its own container and its tabs"
+)
+assert(Scanned(open.bags)[-2] == nil, "a bank item is never a bag item")
 harness.env.BankFrame:Hide()
 
 print("snapshots_spec: ok")
