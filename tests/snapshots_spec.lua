@@ -33,6 +33,25 @@ assert(
 	"snapshots should round trip through flat saved values"
 )
 
+-- With the bank open, the carried bags 0 to 4 are read once, as bags, and the bank is -1 plus bags 5 to 10.
+local read = {}
+harness.env.NUM_BAG_SLOTS, harness.env.NUM_BANKBAGSLOTS = 4, 6
+harness.env.BankFrame = harness.env.CreateFrame("Frame", "BankFrame")
+harness.env.C_Container.GetContainerNumSlots = function(container)
+	read[container] = (read[container] or 0) + 1
+	return 1
+end
+harness.env.C_Container.GetContainerItemInfo = function(container)
+	return { itemID = 200 + container, stackCount = 1, hyperlink = "item:" .. (200 + container) }
+end
+local open = harness.ns.Snapshots.Scan()
+assert(#open.bags == 5 and #open.bank == 7, "an open bank should not count the carried bags again")
+for container = -1, 10 do
+	assert(read[container] == 1, "container " .. container .. " should be read exactly once")
+end
+assert(read[11] == nil, "nothing past the last bank bag should be read")
+harness.env.BankFrame:Hide()
+
 print("snapshots_spec: ok")
 
 harness.env.C_GuildBank = {

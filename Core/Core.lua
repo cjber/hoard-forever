@@ -35,11 +35,11 @@ local function CharacterKey()
 	return tostring(name or "Unknown") .. "-" .. tostring(realm or "Unknown")
 end
 
-local function SaveSnapshot()
+-- Saves this character's scan for the Alts tab, unless the player turned recording off.
+local function SaveSnapshot(scan)
 	if not HoardForeverDB.settings.recordAlts then
 		return
 	end
-	local scan = ns.Snapshots.Scan()
 	local key = CharacterKey()
 	local previous = HoardForeverDB.chars[key] or {}
 	previous.bags = scan.bags
@@ -106,13 +106,7 @@ local function Rebuild()
 	local scan = ns.Snapshots.Scan()
 	HoardForeverDB.chars = HoardForeverDB.chars or {}
 	local current = CharacterKey()
-	local old = HoardForeverDB.chars[current] or {}
-	old.bags = scan.bags
-	if scan.bank then
-		old.bank = scan.bank
-	end
-	old.updated = time()
-	HoardForeverDB.chars[current] = old
+	SaveSnapshot(scan)
 	local guild = GuildKey()
 	local guildSnapshot = guild and HoardForeverDB.guilds[guild]
 	if HoardForeverDB.settings.cacheGuild and guildSnapshot then
@@ -164,7 +158,7 @@ frame:SetScript("OnEvent", function(_, event, arg)
 		end
 		frame:RegisterEvent("PLAYER_LOGOUT")
 	elseif event == "PLAYER_LOGOUT" then
-		SaveSnapshot()
+		SaveSnapshot(ns.Snapshots.Scan())
 	elseif event == "GUILDBANKFRAME_OPENED" then
 		guildBankOpen = true
 		QueryGuildTabs()

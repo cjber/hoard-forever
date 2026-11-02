@@ -32,6 +32,9 @@ assert(#ns.Model.Query(index, "q:mythic", "All") == 0, "unknown quality tokens s
 assert(#ns.Model.Query({}, "anything", "All") == 0, "empty index should be safe")
 local ranked = ns.Model.Query(index, "arcane", "All")
 assert(ranked[1].name == "Arcane Crystal", "prefix result with more copies should rank first")
+local guildIndex = ns.Model.Build({ row("Arcane Crystal", "guild", 5, "Guild-Realm", { tab = "Materials" }) })
+assert(#ns.Model.Query(guildIndex, "crystal", "Alts") == 0, "the guild vault is not an alt")
+assert(ns.Model.Query(guildIndex, "crystal", "Guild")[1].total == 5, "guild records should stay on the Guild tab")
 local accentIndex = ns.Model.Build({ row("Élan Crystal", "bags", 1, nil, { itemID = 103 }) })
 assert(#ns.Model.Query(accentIndex, "elan", "All") == 1, "search should ignore accents")
 

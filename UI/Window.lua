@@ -8,7 +8,8 @@ local function Refresh()
 	end
 	local results = ns.Model.Query(ns.index, queryText:GetText(), selectedTab)
 	ns.Results.Render(window.list, results)
-	window.status:SetText(#results .. " results. Shift-click to link an item.")
+	local count = #results == 1 and "1 result." or (#results .. " results.")
+	window.status:SetText(count .. " Shift-click to link an item.")
 	window.empty:SetShown(#results == 0)
 	window.empty:SetText("No items found for “" .. queryText:GetText() .. "”.")
 end
@@ -37,9 +38,14 @@ function ns.Open(query)
 				ChatEdit_InsertLink(results[1].link)
 			end
 		end)
-		window.list = CreateFrame("Frame", nil, window)
-		window.list:SetPoint("TOPLEFT", window.search, "BOTTOMLEFT", 0, -60)
-		window.list:SetPoint("BOTTOMRIGHT", window, "BOTTOMRIGHT", -28, 48)
+		-- Rows live in a scroll child, so a search with more results than fit scrolls instead of drawing past the frame.
+		window.scroll = CreateFrame("ScrollFrame", "HoardForeverResultsScroll", window, "UIPanelScrollFrameTemplate")
+		window.scroll.scrollBarHideable = true
+		window.scroll:SetPoint("TOPLEFT", window.search, "BOTTOMLEFT", 0, -60)
+		window.scroll:SetPoint("BOTTOMRIGHT", window, "BOTTOMRIGHT", -50, 48)
+		window.list = CreateFrame("Frame", nil, window.scroll)
+		window.list:SetSize(720 - 24 - 50, 1)
+		window.scroll:SetScrollChild(window.list)
 		window.empty = window.list:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
 		window.empty:SetPoint("TOPLEFT", 8, -8)
 		window.status = window:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")

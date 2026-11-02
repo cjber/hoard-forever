@@ -79,7 +79,8 @@ local function MatchSource(item, tab)
 		return true
 	end
 	for _, source in ipairs(item.sources) do
-		if tab == "Alts" and source.character then
+		-- A guild source carries the guild's name as its holder, but the vault is not an alt.
+		if tab == "Alts" and source.character and source.kind ~= "guild" then
 			return true
 		end
 		if tab == "Bags" and source.kind == "bags" and not source.character then
