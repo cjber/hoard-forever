@@ -32,7 +32,13 @@ function Model.Build(scan)
 			local sourceKey = table.concat({ raw.kind or "bags", raw.character or "", raw.tab or "" }, "|")
 			local source = item._sources and item._sources[sourceKey]
 			if not source then
-				source = { kind = raw.kind or "bags", character = raw.character, tab = raw.tab, count = 0 }
+				source = {
+					kind = raw.kind or "bags",
+					character = raw.character,
+					tab = raw.tab,
+					updated = raw.updated,
+					count = 0,
+				}
 				item._sources = item._sources or {}
 				item._sources[sourceKey] = source
 				item.sources[#item.sources + 1] = source

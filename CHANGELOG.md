@@ -4,6 +4,9 @@ All notable changes to this addon are recorded here. The format follows Keep a C
 
 ## [Unreleased]
 
+- **Choose the tab the window opens on.** Settings > AddOns > Hoard Forever has an Open on tab option, and the window now opens on it. The setting was saved but never read, so the window always started on whatever tab was last left selected.
+- **See how old an alt's stash is.** Hovering a result lists each alt's stack with how long ago that character was recorded, dimmed, such as "Updated 3d ago", so an old reading is not mistaken for what the alt carries now.
+
 ## [0.1.2] - 2026-11-02
 
 - **Opening the bank no longer doubles what you carry.** The bank scan read the backpack and bags along with the bank, so every carried stack counted twice while the bank was open. It now reads the bank and its bank bags only.

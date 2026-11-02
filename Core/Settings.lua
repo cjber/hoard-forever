@@ -21,6 +21,17 @@ local function Register()
 		end, function(checked)
 			HoardForeverDB.settings.recordAlts = checked
 		end)
+		page.AddDropdown(target, "Open on tab", function()
+			return HoardForeverDB.settings.defaultTab
+		end, function(value)
+			HoardForeverDB.settings.defaultTab = value
+		end, {
+			{ "All", "All" },
+			{ "Bags", "Bags" },
+			{ "Bank", "Bank" },
+			{ "Alts", "Alts" },
+			{ "Guild", "Guild" },
+		})
 		page.AddButton(target, "Clear alt snapshots", function()
 			local current = UnitName("player") .. "-" .. GetRealmName()
 			for key in pairs(HoardForeverDB.chars) do

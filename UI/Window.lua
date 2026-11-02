@@ -2,6 +2,29 @@ local _, ns = ...
 local window, queryText, selectedTab
 local tabs = { "All", "Bags", "Bank", "Alts", "Guild" }
 
+-- Selects a tab by name, showing it as the selected tab button.
+local function SelectTab(name)
+	selectedTab = name
+	for index, button in ipairs(window.tabs) do
+		if tabs[index] == name then
+			PanelTemplates_SelectTab(button)
+		else
+			PanelTemplates_DeselectTab(button)
+		end
+	end
+end
+
+-- The tab the window opens on: the player's choice from the settings page, or All for a value no tab has.
+local function DefaultTab()
+	local saved = HoardForeverDB and HoardForeverDB.settings and HoardForeverDB.settings.defaultTab
+	for _, name in ipairs(tabs) do
+		if name == saved then
+			return name
+		end
+	end
+	return "All"
+end
+
 local function Refresh()
 	if not window or not ns.index then
 		return
@@ -54,20 +77,19 @@ function ns.Open(query)
 		for index, name in ipairs(tabs) do
 			local tab = CreateFrame("Button", nil, window, "PanelTabButtonTemplate")
 			tab:SetID(index)
-			tab:SetText(name)
+			tab:SetText(ns.L[name])
 			tab:SetPoint("TOPLEFT", window, "TOPLEFT", 18 + (index - 1) * 84, -82)
 			tab:SetScript("OnClick", function(self)
-				selectedTab = tabs[self:GetID()]
-				for _, button in ipairs(window.tabs) do
-					PanelTemplates_DeselectTab(button)
-				end
-				PanelTemplates_SelectTab(self)
+				SelectTab(tabs[self:GetID()])
 				Refresh()
 			end)
 			window.tabs[index] = tab
 		end
-		selectedTab = "All"
+		window:Hide()
 		table.insert(UISpecialFrames, "HoardForeverWindow")
+	end
+	if not window:IsShown() then
+		SelectTab(DefaultTab())
 	end
 	queryText = window.search
 	if query then
