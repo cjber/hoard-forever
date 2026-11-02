@@ -47,6 +47,12 @@ Built with AI assistance.
 
 ![Search bags and bank](screenshots/search.png)
 
+Each result shows the total on the right and how many sit in your bags and bank.
+
 ![Search saved characters](screenshots/alts.png)
 
+The Alts tab names the character holding each stack and whether it is in their bags or bank.
+
 ![No matching items](screenshots/empty.png)
+
+A search with no matches says so and keeps your query in the box.
