@@ -4,6 +4,8 @@ All notable changes to this addon are recorded here. The format follows Keep a C
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-11-02
+
 - **Opening the bank no longer doubles what you carry.** The bank scan read the backpack and bags along with the bank, so every carried stack counted twice while the bank was open. It now reads the bank and its bank bags only.
 - **Guild vault items stay on the Guild tab.** They no longer also appear under `Alts`.
 - **Turning off "Record this character for the Alts tab" stops the saving.** The character's bags were still written to the saved file on every change; now they are only indexed for this session.
