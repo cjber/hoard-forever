@@ -38,7 +38,7 @@ It only reads. It never moves, sells, mails or uses an item.
 
 ## Install
 
-Download the zip from [Releases](https://github.com/cjber/hoard-forever/releases) and extract it into `_classic_beta_/Interface/AddOns/`, so you end up with `AddOns/HoardForever/HoardForever.toc`. After an update, `/reload`.
+Download the zip from [Releases](https://github.com/cjber/hoard-forever/releases) and extract it into the WoW: Forever client's `Interface/AddOns/` folder (`_forever_` on the live client, `_classic_beta_` on the beta), so you end up with `AddOns/HoardForever/HoardForever.toc`. After an update, `/reload`.
 
 The addon targets the WoW: Forever client, Interface 16001. It needs nothing else installed.
 
