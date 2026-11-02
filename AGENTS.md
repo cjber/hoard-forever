@@ -11,7 +11,7 @@ Read `docs/build-brief.md` for the product boundaries and the vault behavior bef
 ```sh
 python3 .sift/gate.py --base origin/main
 python3 .sift/agents.py check
-python3 tools/typecheck.sh
+bash tools/typecheck.sh
 stylua --check .
 luacheck .
 for spec in tests/*_spec.lua; do luajit "$spec" || exit 1; done
