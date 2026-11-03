@@ -52,8 +52,8 @@ Never: craft, mail, sell or use an item, plan a route (`shortest-path-forever`),
 
 ## Standards
 
-- `wow-forever-addon` — https://github.com/cjber/forever-core/tree/af94fd89610c9128bc11ec07354bd9abafb5dd0/.agents/skills/wow-forever-addon (shared UI, icon, docs, CI and release requirements)
-- `wow-retail-ui-style` — https://github.com/cjber/forever-core/tree/af94fd89610c9128bc11ec07354bd9abafb5dd0/.agents/skills/wow-retail-ui-style (native host integration, compact layout rhythm and approved asset blacklist)
+- `wow-forever-addon`: https://github.com/cjber/forever-core/tree/af94fd89610c9128bc11ec07354bd9dabafb5dd0/.agents/skills/wow-forever-addon (shared UI, icon, docs, CI and release requirements)
+- `wow-retail-ui-style`: https://github.com/cjber/forever-core/tree/af94fd89610c9128bc11ec07354bd9dabafb5dd0/.agents/skills/wow-retail-ui-style (native host integration, compact layout rhythm and approved asset blacklist)
 
 ## Rules
 
