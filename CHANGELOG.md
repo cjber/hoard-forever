@@ -4,6 +4,8 @@ All notable changes to this addon are recorded here. The format follows Keep a C
 
 ## [Unreleased]
 
+## [0.1.5] - 2026-11-03
+
 - **Item tooltips use translated source labels.** Bank and bag labels match the result row in every language.
 - **Empty searches show a useful message.** The item-link hint appears only when a search has results.
 
