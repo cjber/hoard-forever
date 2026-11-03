@@ -14,7 +14,7 @@ if not (WOWMOCK / "wowmock.py").is_file():
     raise SystemExit(f"wowmock.py not found in {WOWMOCK}; set FOREVER_CORE to the forever-core checkout")
 sys.path.insert(0, str(WOWMOCK))
 
-from wowmock import ARIALN, FONTS, WHITE, Font, Ui, panel_tabs, portrait_frame_art, search_box  # noqa: E402
+from wowmock import ARIALN, FONTS, WHITE, Font, Ui, panel_tabs, portrait_frame_art, search_box, tiled  # noqa: E402
 
 BUILD = "1.60.1.70124"
 WIDTH, HEIGHT = 764, 500
@@ -27,7 +27,11 @@ QUALITY = {1: (0.9, 0.9, 0.9, 1), 2: (0.12, 0.72, 0.16, 1), 3: (0.14, 0.57, 0.94
 def scene(ui, query, tab, rows, empty=False):
     canvas = ui.canvas(WIDTH, HEIGHT)
     x, y, w, h = FRAME
-    canvas.fill(x + 5, y + 23, w - 10, h - 28, (0.10, 0.11, 0.13, 1))
+    # PortraitFrameTexturedBaseTemplate: tiled Bg, then its 43-unit TopTileStreaks layer.
+    rock = ui.texture("interface/framegeneral/ui-background-rock.blp")
+    tiled(canvas, rock, x + 2, y + 21, w - 4, h - 23, rock.width / ui.scale, rock.height / ui.scale)
+    streaks = ui.atlas("_UI-Frame-TopTileStreaks")
+    tiled(canvas, streaks.image, x + 6, y + 21, w - 8, 43, 256, 43)
     portrait = Image.open(ROOT / "media/icon-400.png").convert("RGBA")
     portrait_frame_art(canvas, x, y, w, h, portrait, "Hoard Forever")
 
@@ -35,7 +39,7 @@ def scene(ui, query, tab, rows, empty=False):
     canvas.text(x + 41, y + 57, query, FONTS["GameFontHighlightSmall"], box_height=20)
     panel_tabs(canvas, x + 18, y + h - 22, ["All", "Bags", "Bank", "Alts", "Guild"], tab)
 
-    list_x, list_y, list_w = x + 28, y + 94, w - 78
+    list_x, list_y, list_w = x + 24, y + 92, w - 74
     if empty:
         empty = "No items found." if not query else f"No items found for “{query}”."
         canvas.text(list_x + 8, list_y + 8, empty, FONTS["GameFontDisableSmall"])
@@ -43,16 +47,16 @@ def scene(ui, query, tab, rows, empty=False):
         for index, (item_name, total, sources) in enumerate(rows):
             item = ui.item(ITEM_IDS[item_name])
             row_y = list_y + index * 50
-            canvas.draw(ui.texture(item.icon), list_x + 6, row_y + 7, 37, 37)
+            canvas.draw(ui.texture(item.icon), list_x + 6, row_y + 4.5, 37, 37)
             color = QUALITY.get(item.quality, FONTS["GameFontHighlight"].color)
-            canvas.text(list_x + 50, row_y + 8, item.name, FONTS["GameFontHighlight"], color)
+            canvas.text(list_x + 51, row_y + 8, item.name, FONTS["GameFontHighlight"], color)
             canvas.text(list_x + list_w - 42, row_y + 8, str(total), COUNT_FONT, justify="RIGHT", width=34)
-            canvas.text(list_x + 50, row_y + 29, sources, FONTS["GameFontHighlightSmall"])
+            canvas.text(list_x + 51, row_y + 29, sources, FONTS["GameFontHighlightSmall"])
 
     status = (
         "0 results. Shift-click to link an item." if empty else f"{len(rows)} results. Shift-click to link an item."
     )
-    canvas.text(x + w - 388, y + h - 34, status, FONTS["GameFontHighlightSmall"], justify="RIGHT", width=360)
+    canvas.text(x + w - 388, y + h - 40, status, FONTS["GameFontHighlightSmall"], justify="RIGHT", width=360)
     return canvas
 
 
