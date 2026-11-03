@@ -129,3 +129,27 @@ ns.Open()
 assert(queried == "All" and selected == window.tabs[1], "an unknown saved tab opens on All")
 
 print("core_spec: ok")
+
+-- The client's bank events drive the scan: an open bank is read while BankFrame stays hidden (a bag replacement
+-- reparents it), and closing the bank keeps the cached scan so the Bank tab still answers.
+local inside = env.C_Container.GetContainerNumSlots
+env.C_Container.GetContainerNumSlots = function(container)
+	return container == -1 and 1 or inside(container)
+end
+local info = env.C_Container.GetContainerItemInfo
+env.C_Container.GetContainerItemInfo = function(container, slot)
+	if container == -1 and slot == 1 then
+		return { itemID = 77, stackCount = 4, hyperlink = "item:77" }
+	end
+	return info(container, slot)
+end
+harness:Fire("BANKFRAME_OPENED")
+assert(
+	db.chars[current].bank and db.chars[current].bank[1].itemID == 77,
+	"an open bank should be read without BankFrame"
+)
+harness:Fire("BANKFRAME_CLOSED")
+assert(
+	db.chars[current].bank and db.chars[current].bank[1].itemID == 77,
+	"closing the bank should keep the cached bank"
+)

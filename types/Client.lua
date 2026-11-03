@@ -11,9 +11,6 @@ SlashCmdList = {}
 ---@type string[]
 UISpecialFrames = {}
 
----@type Frame
-BankFrame = nil
-
 -- The number of carried bag slots (the backpack is 0, the setup bags follow it) and of bank bags.
 ---@type integer
 NUM_BAG_SLOTS = 4
