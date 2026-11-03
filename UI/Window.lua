@@ -31,8 +31,11 @@ local function Refresh()
 	end
 	local results = ns.Model.Query(ns.index, queryText:GetText(), selectedTab)
 	ns.Results.Render(window.list, results)
-	local status = #results == 1 and ns.L["1 result. Shift-click to link an item."]
-		or ns.L["%d results. Shift-click to link an item."]:format(#results)
+	local status = ""
+	if #results > 0 then
+		status = #results == 1 and ns.L["1 result. Shift-click to link an item."]
+			or ns.L["%d results. Shift-click to link an item."]:format(#results)
+	end
 	window.status:SetText(status)
 	window.empty:SetShown(#results == 0)
 	local query = queryText:GetText()

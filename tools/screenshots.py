@@ -53,9 +53,7 @@ def scene(ui, query, tab, rows, empty=False):
             canvas.text(list_x + list_w - 42, row_y + 8, str(total), COUNT_FONT, justify="RIGHT", width=34)
             canvas.text(list_x + 51, row_y + 29, sources, FONTS["GameFontHighlightSmall"])
 
-    status = (
-        "0 results. Shift-click to link an item." if empty else f"{len(rows)} results. Shift-click to link an item."
-    )
+    status = "" if empty else f"{len(rows)} results. Shift-click to link an item."
     canvas.text(x + w - 388, y + h - 40, status, FONTS["GameFontHighlightSmall"], justify="RIGHT", width=360)
     return canvas
 
