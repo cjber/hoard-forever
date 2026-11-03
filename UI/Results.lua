@@ -27,7 +27,7 @@ local function ShowTooltip(row)
 		if source.character and source.updated and source.kind ~= "guild" then
 			local gray = GRAY_FONT_COLOR
 			GameTooltip:AddDoubleLine(
-				source.character .. " " .. source.kind .. " " .. source.count,
+				source.character .. " " .. (L[source.kind] or source.kind) .. " " .. source.count,
 				Results.Age(now - source.updated),
 				1,
 				1,

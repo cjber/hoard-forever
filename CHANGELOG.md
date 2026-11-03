@@ -4,6 +4,9 @@ All notable changes to this addon are recorded here. The format follows Keep a C
 
 ## [Unreleased]
 
+- **Item tooltips use translated source labels.** Bank and bag labels match the result row in every language.
+- **Empty searches show a useful message.** The item-link hint appears only when a search has results.
+
 ## [0.1.4] - 2026-11-03
 
 - **Bank items stay searchable after closing the bank.** Your current character uses the last bank snapshot until the bank is opened again.
