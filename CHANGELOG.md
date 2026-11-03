@@ -4,6 +4,8 @@ All notable changes to this addon are recorded here. The format follows Keep a C
 
 ## [Unreleased]
 
+- **Controls use the Forever asset set.** Buttons use the native gold-bordered family, and CI rejects legacy loose chrome in runtime UI and screenshot renderers.
+
 ## [0.1.5] - 2026-11-03
 
 - **Item tooltips use translated source labels.** Bank and bag labels match the result row in every language.
