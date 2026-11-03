@@ -33,6 +33,21 @@ db.settings.recordAlts = true
 ns.Rebuild()
 assert(next(db.chars) ~= nil, "a character with recording on should be saved")
 
+-- Closing the bank must refresh bags without deleting the last bank scan or its older age.
+local current = next(db.chars)
+local bankTime = harness.env.time()
+db.chars[current].bank = { { itemID = 99, count = 2, name = "Bank Item" } }
+db.chars[current].bankUpdated = bankTime - 600
+db.chars[current].bagsUpdated = bankTime - 60
+ns.Rebuild()
+assert(
+	db.chars[current].bank and db.chars[current].bank[1].itemID == 99,
+	"a closed bank must keep its cached bank items"
+)
+assert(db.chars[current].bankUpdated == bankTime - 600, "a bag scan must not refresh the bank age")
+local bankResults = ns.Model.Query(ns.index, "bank", "Bank")
+assert(bankResults[1] and bankResults[1].itemID == 99, "a closed bank must remain searchable in the current Bank tab")
+
 -- The result list grows with its rows, so its scroll frame can reach every one, and a row explains itself on hover.
 local list = harness.env.CreateFrame("Frame", nil, harness.env.UIParent)
 list.rows = {} -- the mock answers any unknown field with a function, where the client answers nil
@@ -41,7 +56,7 @@ for index = 1, 8 do
 	items[index] = { itemID = index, name = "Item " .. index, total = 1, sources = { { kind = "bags", count = 1 } } }
 end
 ns.Results.Render(list, items)
-assert(list:GetHeight() == 8 * 52, "the list should be as tall as its rows")
+assert(list:GetHeight() == 8 * 50, "the list should be as tall as its rows")
 assert(list.rows[1]:GetScript("OnEnter"), "a result row should show its tooltip on hover")
 
 -- Each alt's stack carries the time its snapshot was saved, and the row's tooltip says how old it is, dimmed.
@@ -50,9 +65,14 @@ db.chars["Arderin-TestRealm"] =
 	{ updated = env.time() - 3 * 86400, bags = { { itemID = 55, count = 2, name = "Mock Item" } } }
 ns.Rebuild()
 local altSource
-for _, source in ipairs(ns.index[1].sources) do
-	if source.character == "Arderin-TestRealm" then
-		altSource = source
+
+for _, item in ipairs(ns.index) do
+	if item.itemID == 55 then
+		for _, source in ipairs(item.sources) do
+			if source.character == "Arderin-TestRealm" then
+				altSource = source
+			end
+		end
 	end
 end
 assert(altSource and altSource.updated == env.time() - 3 * 86400, "an alt's stack should keep its snapshot's time")
@@ -61,7 +81,13 @@ local lines = {}
 env.GameTooltip.AddDoubleLine = function(_, left, right, _, _, _, r)
 	lines[#lines + 1] = { left = left, right = right, r = r }
 end
-ns.Results.Render(list, ns.index)
+local item55
+for _, item in ipairs(ns.index) do
+	if item.itemID == 55 then
+		item55 = item
+	end
+end
+ns.Results.Render(list, { item55 })
 list.rows[1]:GetScript("OnEnter")(list.rows[1])
 assert(#lines == 1, "the tooltip should name the one alt stack, not this character's bags")
 assert(lines[1].left == "Arderin-TestRealm bags 2", "the line should name the alt and its stack")

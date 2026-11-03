@@ -31,10 +31,11 @@ local function Refresh()
 	end
 	local results = ns.Model.Query(ns.index, queryText:GetText(), selectedTab)
 	ns.Results.Render(window.list, results)
-	local count = #results == 1 and "1 result." or (#results .. " results.")
-	window.status:SetText(count .. " Shift-click to link an item.")
+	local count = #results == 1 and ("1 " .. ns.L["result"] .. ".") or (#results .. " " .. ns.L["results"] .. ".")
+	window.status:SetText(count .. " " .. ns.L["Shift-click to link an item."])
 	window.empty:SetShown(#results == 0)
-	window.empty:SetText("No items found for “" .. queryText:GetText() .. "”.")
+	local query = queryText:GetText()
+	window.empty:SetText(query == "" and ns.L["No items found."] or ns.L["No items found for “%s”."]:format(query))
 end
 
 function ns.Open(query)
@@ -50,11 +51,14 @@ function ns.Open(query)
 			self:StopMovingOrSizing()
 		end)
 		window.TitleText:SetText("Hoard Forever")
-		window.search = CreateFrame("EditBox", nil, window, "InputBoxTemplate")
+		if window.SetPortraitToAsset then
+			window:SetPortraitToAsset("Interface\\AddOns\\HoardForever\\media\\Icon")
+		end
+		window.search = CreateFrame("EditBox", nil, window, "SearchBoxTemplate")
 		window.search:SetSize(300, 26)
 		window.search:SetPoint("TOPLEFT", 24, -54)
 		window.search:SetAutoFocus(false)
-		window.search:SetScript("OnTextChanged", Refresh)
+		window.search:HookScript("OnTextChanged", Refresh)
 		window.search:SetScript("OnEnterPressed", function(self)
 			local results = ns.Model.Query(ns.index or {}, self:GetText(), selectedTab)
 			if results[1] and results[1].link then
@@ -64,7 +68,7 @@ function ns.Open(query)
 		-- Rows live in a scroll child, so a search with more results than fit scrolls instead of drawing past the frame.
 		window.scroll = CreateFrame("ScrollFrame", "HoardForeverResultsScroll", window, "UIPanelScrollFrameTemplate")
 		window.scroll.scrollBarHideable = true
-		window.scroll:SetPoint("TOPLEFT", window.search, "BOTTOMLEFT", 0, -60)
+		window.scroll:SetPoint("TOPLEFT", window.search, "BOTTOMLEFT", 0, -12)
 		window.scroll:SetPoint("BOTTOMRIGHT", window, "BOTTOMRIGHT", -50, 48)
 		window.list = CreateFrame("Frame", nil, window.scroll)
 		window.list:SetSize(720 - 24 - 50, 1)
@@ -72,13 +76,17 @@ function ns.Open(query)
 		window.empty = window.list:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
 		window.empty:SetPoint("TOPLEFT", 8, -8)
 		window.status = window:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-		window.status:SetPoint("BOTTOMLEFT", 28, 22)
+		window.status:SetPoint("BOTTOMRIGHT", -28, 28)
 		window.tabs = {}
 		for index, name in ipairs(tabs) do
 			local tab = CreateFrame("Button", nil, window, "PanelTabButtonTemplate")
 			tab:SetID(index)
 			tab:SetText(ns.L[name])
-			tab:SetPoint("TOPLEFT", window, "TOPLEFT", 18 + (index - 1) * 84, -82)
+			if index == 1 then
+				tab:SetPoint("BOTTOMLEFT", window, "BOTTOMLEFT", 18, 0)
+			else
+				tab:SetPoint("LEFT", window.tabs[index - 1], "RIGHT", 3, 0)
+			end
 			tab:SetScript("OnClick", function(self)
 				SelectTab(tabs[self:GetID()])
 				Refresh()
