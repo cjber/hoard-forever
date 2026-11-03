@@ -56,6 +56,9 @@ local function SaveSnapshot(scan)
 end
 
 local guildBankOpen = false
+-- Whether the character bank is open, from the client's own events. Bag replacements keep BankFrame hidden for the
+-- whole session, so the frame's visibility cannot answer this.
+local bankOpen = false
 
 local function GuildKey()
 	local getGuildInfo = _G.GetGuildInfo
@@ -108,7 +111,7 @@ local function QueryGuildTabs()
 end
 
 local function Rebuild()
-	local scan = ns.Snapshots.Scan()
+	local scan = ns.Snapshots.Scan(bankOpen)
 	HoardForeverDB.chars = HoardForeverDB.chars or {}
 	local current = CharacterKey()
 	SaveSnapshot(scan)
@@ -154,6 +157,8 @@ frame:SetScript("OnEvent", function(_, event, arg)
 		frame:UnregisterEvent("ADDON_LOADED")
 		for _, name in ipairs({
 			"BAG_UPDATE_DELAYED",
+			"BANKFRAME_OPENED",
+			"BANKFRAME_CLOSED",
 			"PLAYERBANKSLOTS_CHANGED",
 			"PLAYERBANKBAGSLOTS_CHANGED",
 			"GUILDBANK_UPDATE_TABS",
@@ -166,7 +171,13 @@ frame:SetScript("OnEvent", function(_, event, arg)
 		end
 		frame:RegisterEvent("PLAYER_LOGOUT")
 	elseif event == "PLAYER_LOGOUT" then
-		SaveSnapshot(ns.Snapshots.Scan())
+		SaveSnapshot(ns.Snapshots.Scan(bankOpen))
+	elseif event == "BANKFRAME_OPENED" then
+		bankOpen = true
+		Rebuild()
+	elseif event == "BANKFRAME_CLOSED" then
+		bankOpen = false
+		Rebuild()
 	elseif event == "GUILDBANKFRAME_OPENED" then
 		guildBankOpen = true
 		QueryGuildTabs()

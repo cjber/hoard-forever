@@ -82,7 +82,11 @@ local function ContainerID(index, name, fallback)
 	return fallback
 end
 
-function Snapshots.Scan()
+-- `bankOpen` comes from the client's own BANKFRAME_OPENED/CLOSED events, never from BankFrame:IsShown(): a bag
+-- replacement such as Baganator keeps that frame reparented to a hidden parent for the whole session, so a hidden
+-- frame does not mean a closed bank.
+---@param bankOpen boolean?
+function Snapshots.Scan(bankOpen)
 	local index = Enum and Enum.BagIndex
 	local scan = { bags = {}, bank = nil }
 	-- The backpack and the setup bags, then the reagent bag as one more carried bag.
@@ -90,7 +94,6 @@ function Snapshots.Scan()
 		Append(scan.bags, ReadContainer(slot, "bags"))
 	end
 	Append(scan.bags, ReadContainer(ContainerID(index, "ReagentBag", REAGENT_BAG), "bags"))
-	local bankOpen = BankFrame and BankFrame:IsShown()
 	if bankOpen then
 		scan.bank = {}
 		-- The character bank and its tabs, which the enum numbers after the reagent bag.

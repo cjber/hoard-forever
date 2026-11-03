@@ -1,7 +1,6 @@
 local Mock = dofile("tests/wow_mock.lua")
 local h = Mock.Harness()
 h:Fire("ADDON_LOADED", "HoardForever")
-h.env.BankFrame = h.env.CreateFrame("Frame", "BankFrame")
 h.env.C_Container = {
 	GetContainerNumSlots = function(container)
 		return (container == 0 or container == -1) and 1 or 0
@@ -23,13 +22,11 @@ local function total(id)
 	end
 	return 0
 end
-h.env.BankFrame:Show()
-h.ns.Rebuild()
+h:Fire("BANKFRAME_OPENED")
 assert(total(55) == 3 and total(66) == 7, "open bank and bags are counted once")
-h.env.BankFrame:Hide()
+h:Fire("BANKFRAME_CLOSED")
 h:Fire("BAG_UPDATE_DELAYED")
 assert(total(55) == 3 and total(66) == 7, "closed bank keeps cached current-character items")
-h.env.BankFrame:Show()
-h.ns.Rebuild()
+h:Fire("BANKFRAME_OPENED")
 assert(total(66) == 7, "reopening the bank does not double-count cached contents")
 print("closed bank: ok")
