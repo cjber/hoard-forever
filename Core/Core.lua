@@ -42,11 +42,16 @@ local function SaveSnapshot(scan)
 	end
 	local key = CharacterKey()
 	local previous = HoardForeverDB.chars[key] or {}
+	local previousUpdated = previous.updated
 	previous.bags = scan.bags
+	previous.bagsUpdated = time()
 	if scan.bank then
 		previous.bank = scan.bank
+		previous.bankUpdated = previous.bagsUpdated
+	elseif previous.bank and not previous.bankUpdated then
+		previous.bankUpdated = previousUpdated
 	end
-	previous.updated = time()
+	previous.updated = previous.bagsUpdated
 	HoardForeverDB.chars[key] = previous
 end
 
@@ -123,7 +128,9 @@ local function Rebuild()
 					for key, value in pairs(item) do
 						copy[key] = value
 					end
-					copy.kind, copy.character, copy.updated = kind, character, snapshot.updated
+					copy.kind, copy.character = kind, character ~= current and character or nil
+					copy.updated = kind == "bank" and (snapshot.bankUpdated or snapshot.updated)
+						or (snapshot.bagsUpdated or snapshot.updated)
 					scan.records[#scan.records + 1] = copy
 				end
 			end
