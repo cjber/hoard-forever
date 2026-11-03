@@ -17,6 +17,7 @@ luacheck .
 for spec in tests/*_spec.lua; do luajit "$spec" || exit 1; done
 uvx ruff@0.16.8 check tools && uvx ruff@0.16.8 format --check tools
 python3 tools/changelog.py --check
+python3 tools/deadcode.py --check
 FOREVER_CORE=/path/to/forever-core python3 tools/screenshots.py  # after changing a mock scene
 python3 tools/check_screenshots.py
 ```
@@ -24,7 +25,9 @@ python3 tools/check_screenshots.py
 Specs are Lua 5.1 scripts run with LuaJIT through `tests/wow_mock.lua`, a headless client with inert frames and
 hand-delivered events. `tools/` holds development tooling, which `.pkgmeta` keeps out of the package:
 `tools/changelog.py` prints or checks a release's entry, `tools/check_package.py` checks what the packager built, and
-`tools/release_check.py` gates the release on a green full CI run. Screenshot regeneration uses the shared renderer in a sibling `forever-core` checkout; set `FOREVER_CORE` when it is elsewhere.
+`tools/release_check.py` gates the release on a green full CI run. CI runs the same gate in the jobs `deadcode`,
+`check`, `python`, `typecheck`, `project-rules` (changelog and the Sloppatrol gate), `workflows`, `secrets` and
+`package`, each on every pull request. Screenshot regeneration uses the shared renderer in a sibling `forever-core` checkout; set `FOREVER_CORE` when it is elsewhere.
 
 ## Layout
 
