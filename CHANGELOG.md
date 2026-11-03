@@ -4,6 +4,10 @@ All notable changes to this addon are recorded here. The format follows Keep a C
 
 ## [Unreleased]
 
+## [0.1.7] - 2026-11-03
+
+- **Windows keep the Forever look.** The shared asset checker now rejects legacy dialog templates and backdrop globals in runtime UI, not only direct texture references, so the old chrome cannot creep back in through a helper. Adopted from Forever Core.
+
 ## [0.1.6] - 2026-11-03
 
 - **The bank is read under bag replacements.** Baganator keeps Blizzard's bank frame on a hidden parent for the whole
