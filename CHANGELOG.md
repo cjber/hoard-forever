@@ -4,6 +4,10 @@ All notable changes to this addon are recorded here. The format follows Keep a C
 
 ## [Unreleased]
 
+- **The bank is read under bag replacements.** Baganator keeps Blizzard's bank frame on a hidden parent for the whole
+  session, so asking it whether the bank was open said no and the Bank tab quietly collected nothing. The addon now
+  follows the client's own `BANKFRAME_OPENED` and `BANKFRAME_CLOSED` events instead.
+
 ## [0.1.5] - 2026-11-03
 
 - **Item tooltips use translated source labels.** Bank and bag labels match the result row in every language.
