@@ -115,9 +115,10 @@ local function Rebuild()
 		end
 	end
 	for character, snapshot in pairs(HoardForeverDB.chars) do
-		if character ~= current and type(snapshot) == "table" then
+		if type(snapshot) == "table" then
 			for _, kind in ipairs({ "bags", "bank", "guild" }) do
-				for _, item in ipairs(snapshot[kind] or {}) do
+				local cached = character ~= current or (kind == "bank" and scan.bank == nil)
+				for _, item in ipairs(cached and snapshot[kind] or {}) do
 					local copy = {}
 					for key, value in pairs(item) do
 						copy[key] = value

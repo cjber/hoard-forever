@@ -11,8 +11,7 @@ function Model.Build(scan)
 	local grouped = {}
 	for _, raw in ipairs(scan or {}) do
 		if raw.itemID and raw.count and raw.count > 0 then
-			local key =
-				table.concat({ raw.itemID, raw.suffix or "", raw.quality or "", raw.icon or "", raw.name or "" }, "|")
+			local key = table.concat({ raw.itemID, raw.suffix or "" }, "|")
 			local item = grouped[key]
 			if not item then
 				item = {
@@ -28,6 +27,14 @@ function Model.Build(scan)
 					total = 0,
 				}
 				grouped[key] = item
+			end
+			for _, field in ipairs({ "name", "quality", "icon", "class", "ilvl", "link" }) do
+				if
+					raw[field] ~= nil
+					and (item[field] == nil or (field == "name" and item.name == tostring(raw.itemID)))
+				then
+					item[field] = raw[field]
+				end
 			end
 			local sourceKey = table.concat({ raw.kind or "bags", raw.character or "", raw.tab or "" }, "|")
 			local source = item._sources and item._sources[sourceKey]

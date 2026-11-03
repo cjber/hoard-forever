@@ -4,6 +4,9 @@ All notable changes to this addon are recorded here. The format follows Keep a C
 
 ## [Unreleased]
 
+- **Bank items stay searchable after closing the bank.** Your current character uses the last bank snapshot until the bank is opened again.
+- **Uncached item names no longer split totals.** Copies of one item share a row and use known metadata from another character.
+
 ## [0.1.3] - 2026-11-02
 
 - **The bank is the bank, and the reagent bag is carried.** On the Forever client the bank scan read the keyring as the bank and counted the reagent bag among the bank tabs, while the reagent bag was missing from Bags; the scan now takes its containers from the client's own `Enum.BagIndex`, and falls back to the same numbers on a client without it. Nothing else about a snapshot changed, so saved readings still load.
