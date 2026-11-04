@@ -4,6 +4,10 @@ All notable changes to this addon are recorded here. The format follows Keep a C
 
 ## [Unreleased]
 
+## [0.1.10] - 2026-11-04
+
+- **Hoard Forever is retired.** This is the last release. It keeps working, but it will get no fixes or updates. Baganator searches your bags, bank and alts and shows item counts in tooltips, so use it instead.
+
 ## [0.1.9] - 2026-11-04
 
 
