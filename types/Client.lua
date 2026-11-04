@@ -20,8 +20,9 @@ NUM_BANKBAGSLOTS = 6
 ---@type table<number, {r: number, g: number, b: number}>
 ITEM_QUALITY_COLORS = {}
 
----@type fun(link: string?)
-function ChatEdit_InsertLink(link) end
+ChatFrameUtil = {}
+---@type fun(text: string?): boolean
+function ChatFrameUtil.InsertLink(text) end
 
 ---@type fun(tab: Frame)
 function PanelTemplates_SelectTab(tab) end
