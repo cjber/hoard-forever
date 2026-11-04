@@ -5,7 +5,9 @@ The window is the game's own frame, search box and tabs.
 ## Features
 
 - **One search, every container.** Bags, the reagent bag, the bank and its reagent bank are read when the window opens and again when a container changes.
+- **Where it is, in the item's tooltip.** Hover any item and its tooltip lists each place Hoard has seen it with the count there: bags, bank, each alt and the guild vault.
 - **Tabs.** `All`, `Bags`, `Bank`, `Alts` and `Guild` keep the query and switch the source.
+- **Characters.** One tab lists each recorded character with gold, level, professions, hearth, bag and bank totals and when it was last seen.
 - **Counts per source.** A result shows the total and where the stacks sit.
 - **Alts record themselves.** Each character writes its bags and bank when they change and at logout. Hovering a result shows how long ago each alt's stack was recorded.
 - **Filters in the search box.** `q:epic`, `t:weapon` and `ilvl:>200` narrow a search; anything else is searched as text.
@@ -32,7 +34,7 @@ Each one works on its own, and they work together when you install more than one
 
 `/hoard` or `/hoardforever` opens the window, and so does the addon compartment button. `Esc` closes it.
 
-Settings > AddOns > Hoard Forever holds **Open on tab**, **Cache the guild vault**, **Record this character for the Alts tab** and a button to **Clear alt snapshots**.
+Settings > AddOns > Hoard Forever holds **Open on tab**, **Cache the guild vault**, **Show where an item is in its tooltip**, **Record this character for the Alts tab** and a button to **Clear alt snapshots**.
 
 The addon only reads. It never moves, sells, mails or uses an item.
 
@@ -52,6 +54,14 @@ Each result shows the total on the right and how many sit in your bags and bank.
 ![Search saved characters](screenshots/alts.png)
 
 The Alts tab names the character holding each stack and whether it is in their bags or bank.
+
+![An item tooltip listing every place it is](screenshots/tooltip.png)
+
+Hovering an item lists your bags, bank, each alt and the guild vault with the count in each, and how old an alt's reading is.
+
+![Recorded characters](screenshots/characters.png)
+
+The Characters tab shows each character's gold, level, professions and hearth, and when you last played it.
 
 ![No matching items](screenshots/empty.png)
 

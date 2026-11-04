@@ -21,6 +21,16 @@ globals = {
 	"SlashCmdList",
 }
 read_globals = {
+	"canaccessvalue",
+	"GetBindLocation",
+	"GetMoney",
+	"GetProfessionInfo",
+	"GetProfessions",
+	"ItemRefTooltip",
+	"TooltipDataProcessor",
+	"RAID_CLASS_COLORS",
+	"UnitClass",
+	"UnitLevel",
 	"BankFrame",
 	"CONTAINER_BAG_OFFSET",
 	"ContainerFrame_GetContainerNumSlots",

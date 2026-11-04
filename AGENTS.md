@@ -40,8 +40,10 @@ hand-delivered events. `tools/` holds development tooling, which `.pkgmeta` keep
   and writes this character's snapshot. A source the client does not offer is absent, never zero.
 - `Core/Core.lua` owns the saved variables, the event handlers and the slash command; `Core/Settings.lua` is the
   Settings > AddOns page; `Core/API.lua` is the versioned addon-to-addon contract, read as `HoardForever.API`.
-- `UI/` holds the window and the result rows. The window is `PortraitFrameTemplate` with the client's search box and
-  tab buttons; `UI/Results.lua` renders one row per item.
+- `Core/Secret.lua` is the family's `ns.Readable` and `ns.Usable` (WFA-30), copied as is.
+- `UI/` holds the window, the result rows, the Characters tab and the item tooltip lines. The window is
+  `PortraitFrameTemplate` with the client's search box and tab buttons; `UI/Results.lua` renders one row per item,
+  `UI/Characters.lua` one row per recorded character, and `UI/Tooltip.lua` adds the per-source lines to item tooltips.
 
 ## Scope
 
@@ -64,7 +66,8 @@ Never: craft, mail, sell or use an item, plan a route (`shortest-path-forever`),
 - Keep `Core/Model.lua` pure and its specs free of a client. Never rebuild the index per keystroke: keystrokes filter
   a cached index, and no `OnUpdate` or polling timer exists anywhere.
 - Keep SavedVariables flat and serialisable: no frames, functions, userdata, or caches of client tables.
-- Do not hook Blizzard methods. Every change must be safe for secure UI and taint.
+- Do not hook Blizzard methods. Tooltip lines go through `TooltipDataProcessor.AddTooltipPostCall` and start with
+  `ns.Usable(tooltip)`. Every change must be safe for secure UI and taint.
 - Use tabs, annotations, `local addonName, ns = ...`, the established palette and Blizzard fonts. Add a
   `read_globals` entry to `.luacheckrc` only for a genuine client API, never to hide a real warning.
 - Never hand-write item data. Names, quality, icons and links come from the client at runtime.

@@ -20,6 +20,19 @@ NUM_BANKBAGSLOTS = 6
 ---@type table<number, {r: number, g: number, b: number}>
 ITEM_QUALITY_COLORS = {}
 
+-- Each class's colour, by the class file name UnitClass returns second ("MAGE").
+---@type table<string, {r: number, g: number, b: number}>
+RAID_CLASS_COLORS = {}
+
+-- The tooltip a clicked item link opens.
+---@type GameTooltip
+ItemRefTooltip = nil
+
+-- Blizzard's tooltip data pipeline: a post-call runs after the client fills a tooltip of that data type.
+TooltipDataProcessor = {}
+---@type fun(dataType: number, fn: fun(tooltip: GameTooltip, data: table?))
+function TooltipDataProcessor.AddTooltipPostCall(dataType, fn) end
+
 ChatFrameUtil = {}
 ---@type fun(text: string?): boolean
 function ChatFrameUtil.InsertLink(text) end

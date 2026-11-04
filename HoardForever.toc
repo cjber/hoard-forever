@@ -12,11 +12,14 @@
 
 Locales\enUS.lua
 Core\Core.lua
+Core\Secret.lua
 Core\Text.lua
 Core\Snapshots.lua
 Core\Model.lua
 Core\API.lua
 UI\SettingsPage.lua
 Core\Settings.lua
+UI\Tooltip.lua
 UI\Results.lua
+UI\Characters.lua
 UI\Window.lua
