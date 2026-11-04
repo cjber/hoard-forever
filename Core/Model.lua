@@ -176,4 +176,80 @@ function Model.Query(index, text, tab)
 	return items
 end
 
+-- Every place an item is, by itemID, for the item tooltip: the sources of each suffix of that item merged, so a hover
+-- is one table lookup instead of a walk of the index. Built once per rebuild, never per hover.
+---@param index table[]
+---@return table<integer, table[]>
+function Model.ByItem(index)
+	local byItem, keyed = {}, {}
+	for _, item in ipairs(index or {}) do
+		local sources = byItem[item.itemID]
+		if not sources then
+			sources, keyed[item.itemID] = {}, {}
+			byItem[item.itemID] = sources
+		end
+		for _, source in ipairs(item.sources) do
+			local key = table.concat({ source.kind, source.character or "", source.tab or "" }, "|")
+			local merged = keyed[item.itemID][key]
+			if merged then
+				merged.count = merged.count + source.count
+			else
+				merged = {}
+				for field, value in pairs(source) do
+					merged[field] = value
+				end
+				keyed[item.itemID][key] = merged
+				sources[#sources + 1] = merged
+			end
+		end
+	end
+	return byItem
+end
+
+local function ItemCount(records)
+	local total = 0
+	for _, record in ipairs(records or {}) do
+		total = total + (record.count or 0)
+	end
+	return total
+end
+
+-- One summary per recorded character for the Characters tab, read from the saved snapshots alone: the player's own
+-- character first, then the most recently seen. A field a snapshot never recorded stays nil, never zero, and a
+-- character whose bank was never opened has no bank total. `text` filters by name.
+---@param chars table<string, table>
+---@param current string this character's key
+---@param text string?
+---@return table[]
+function Model.Characters(chars, current, text)
+	local query = Fold(text):gsub("^%s+", ""):gsub("%s+$", "")
+	local result = {}
+	for key, snapshot in pairs(chars or {}) do
+		if type(snapshot) == "table" and ns.Text.Rank(Fold(key), query) then
+			result[#result + 1] = {
+				key = key,
+				current = key == current,
+				class = snapshot.class,
+				level = snapshot.level,
+				money = snapshot.money,
+				professions = snapshot.professions,
+				hearth = snapshot.hearth,
+				updated = snapshot.updated,
+				bags = ItemCount(snapshot.bags),
+				bank = snapshot.bank and ItemCount(snapshot.bank) or nil,
+			}
+		end
+	end
+	table.sort(result, function(a, b)
+		if a.current ~= b.current then
+			return a.current
+		end
+		if (a.updated or 0) ~= (b.updated or 0) then
+			return (a.updated or 0) > (b.updated or 0)
+		end
+		return a.key < b.key
+	end)
+	return result
+end
+
 return Model

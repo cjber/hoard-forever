@@ -1,6 +1,6 @@
 local _, ns = ...
 local window, queryText, selectedTab
-local tabs = { "All", "Bags", "Bank", "Alts", "Guild" }
+local tabs = { "All", "Bags", "Bank", "Alts", "Guild", "Characters" }
 
 -- Selects a tab by name, showing it as the selected tab button.
 local function SelectTab(name)
@@ -25,11 +25,30 @@ local function DefaultTab()
 	return "All"
 end
 
+-- The Characters tab lists recorded characters instead of items; it shares the list, the status line and the empty
+-- line with the item tabs.
+local function RefreshCharacters(query)
+	ns.Results.Render(window.list, {})
+	local characters = ns.Model.Characters(HoardForeverDB and HoardForeverDB.chars, ns.CharacterKey(), query)
+	ns.Characters.Render(window.list, characters)
+	window.status:SetText(#characters == 1 and ns.L["1 character."] or ns.L["%d characters."]:format(#characters))
+	window.empty:SetShown(#characters == 0)
+	window.empty:SetText(
+		query == "" and ns.L["No characters recorded."] or ns.L["No characters found for “%s”."]:format(query)
+	)
+end
+
 local function Refresh()
 	if not window or not ns.index then
 		return
 	end
-	local results = ns.Model.Query(ns.index, queryText:GetText(), selectedTab)
+	local query = queryText:GetText()
+	if selectedTab == "Characters" then
+		RefreshCharacters(query)
+		return
+	end
+	ns.Characters.Render(window.list, {})
+	local results = ns.Model.Query(ns.index, query, selectedTab)
 	ns.Results.Render(window.list, results)
 	local status = ""
 	if #results > 0 then
@@ -38,7 +57,6 @@ local function Refresh()
 	end
 	window.status:SetText(status)
 	window.empty:SetShown(#results == 0)
-	local query = queryText:GetText()
 	window.empty:SetText(query == "" and ns.L["No items found."] or ns.L["No items found for “%s”."]:format(query))
 end
 

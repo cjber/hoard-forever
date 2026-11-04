@@ -16,6 +16,11 @@ local function Register()
 				ns.Rebuild()
 			end
 		end)
+		page.AddCheck(target, "Show where an item is in its tooltip", function()
+			return HoardForeverDB.settings.tooltip
+		end, function(checked)
+			HoardForeverDB.settings.tooltip = checked
+		end)
 		page.AddCheck(target, "Record this character for the Alts tab", function()
 			return HoardForeverDB.settings.recordAlts
 		end, function(checked)
@@ -31,6 +36,7 @@ local function Register()
 			{ "Bank", "Bank" },
 			{ "Alts", "Alts" },
 			{ "Guild", "Guild" },
+			{ "Characters", "Characters" },
 		})
 		page.AddButton(target, "Clear alt snapshots", function()
 			local current = UnitName("player") .. "-" .. GetRealmName()

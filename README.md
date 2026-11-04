@@ -16,7 +16,9 @@ It only reads. It never moves, sells, mails or uses an item.
 ## Features
 
 - **One search, every container.** Bags, the reagent bag, the bank and its reagent bank are read when the window opens and again when a container changes, so one name finds every stack instead of one bag's worth.
+- **Where it is, in the item's tooltip.** Hover any item, in a bag, a link or a loot window, and its tooltip lists each place Hoard has seen it with the count there: your bags and bank, each alt and the guild vault. An item Hoard has never seen gets no lines.
 - **Tabs.** `All`, `Bags`, `Bank`, `Alts` and `Guild` keep the query and switch the source. The Guild tab shows a read-only snapshot after you open the guild vault; the cache is saved per guild.
+- **Characters.** The `Characters` tab lists each recorded character with gold, level, professions, hearth, bag and bank totals and when it was last seen. The search box filters it by name.
 - **Counts per source.** A result shows the total and where the stacks sit, so a bank stack is not read as a bag one.
 - **Alts record themselves.** Each character writes its bags and bank when they change and at logout, with a timestamp on the reading, so an alt's stash is searchable without logging over to it. Hovering a result shows how long ago each alt's stack was recorded.
 - **Filters in the search box.** `q:epic` for a quality, `t:weapon` for an item class and `ilvl:>200` for a level. A token the box does not recognise is searched as text, never refused.
@@ -31,6 +33,14 @@ It only reads. It never moves, sells, mails or uses an item.
 ### Search your logged characters
 
 ![Item stacks across three saved characters](docs/screenshots/alts.png)
+
+### Every place an item is, in its tooltip
+
+![A Linen Cloth tooltip listing bags, bank, two alts and the guild vault](docs/screenshots/tooltip.png)
+
+### Every character at a glance
+
+![Three characters with gold, level, professions and hearth](docs/screenshots/characters.png)
 
 ### Nothing matches
 
@@ -50,7 +60,7 @@ The addon targets the WoW: Forever client, Interface 16001. It needs nothing els
 
 The addon compartment button opens it too, and `Esc` closes it.
 
-Settings > AddOns > Hoard Forever holds **Open on tab** (the tab the window opens on), **Cache the guild vault**, **Record this character for the Alts tab**, and a button to **Clear alt snapshots**.
+Settings > AddOns > Hoard Forever holds **Open on tab** (the tab the window opens on), **Cache the guild vault**, **Show where an item is in its tooltip**, **Record this character for the Alts tab**, and a button to **Clear alt snapshots**.
 
 ## What it reads
 
@@ -58,7 +68,7 @@ Bags and the bank come from the client's container API while you have them open.
 
 ## Works alongside
 
-Hoard Forever works with nothing else installed and nothing else depends on it. It does not share the bag, bank or tracking addons' frames, so a bag addon's layout is untouched.
+Hoard Forever works with nothing else installed and nothing else depends on it. If Syndicator or Altoholic already adds item counts to your tooltips, turn off **Show where an item is in its tooltip** so the counts are not listed twice. It does not share the bag, bank or tracking addons' frames, so a bag addon's layout is untouched.
 
 <!-- forever-family:start -->
 
@@ -88,7 +98,7 @@ for spec in tests/*_spec.lua; do luajit "$spec" || exit 1; done
 
 ## Credits
 
-Made by cjber. Blizzard Entertainment for the game, its item and container APIs and the window templates the addon is built from. The WoW: Forever project for the client it is written for. Thanks to everyone who reports a bug or asks for a feature, here or on CurseForge. [THIRD_PARTY.md](THIRD_PARTY.md) lists every input and the full credits.
+Made by cjber. Blizzard Entertainment for the game, its item and container APIs and the window templates the addon is built from. The WoW: Forever project for the client it is written for. The tooltip counts follow [Syndicator](https://www.curseforge.com/wow/addons/syndicator) and the Characters tab follows [Altoholic](https://www.curseforge.com/wow/addons/altoholic); both ideas only, no code copied. Thanks to everyone who reports a bug or asks for a feature, here or on CurseForge. [THIRD_PARTY.md](THIRD_PARTY.md) lists every input and the full credits.
 
 World of Warcraft is a trademark of Blizzard Entertainment, Inc. This addon is not affiliated with or endorsed by Blizzard Entertainment.
 

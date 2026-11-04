@@ -12,7 +12,7 @@ ns.L = ns.L or setmetatable({}, {
 -- Every setting the addon reads is declared here, so an old save file and a new option always agree (WFA-14).
 ns.DEFAULTS = {
 	window = { point = "CENTER", x = 0, y = 0, width = 720, height = 460 },
-	settings = { defaultTab = "All", cacheGuild = true, recordAlts = true },
+	settings = { defaultTab = "All", cacheGuild = true, recordAlts = true, tooltip = true },
 	guilds = {},
 }
 
@@ -35,7 +35,45 @@ local function CharacterKey()
 	return tostring(name or "Unknown") .. "-" .. tostring(realm or "Unknown")
 end
 
--- Saves this character's scan for the Alts tab, unless the player turned recording off.
+-- Each profession's name and skill, in the order the client lists them. GetProfessions leaves nil gaps for empty
+-- slots, so its full return count is walked. A client without it records no professions, not an empty list.
+---@return table[]?
+local function Professions()
+	if type(GetProfessions) ~= "function" or type(GetProfessionInfo) ~= "function" then
+		return nil
+	end
+	local list = {}
+	local function Add(...)
+		for i = 1, select("#", ...) do
+			local index = select(i, ...)
+			if index then
+				local ok, name, _, rank, maxRank = pcall(GetProfessionInfo, index)
+				if ok and type(name) == "string" then
+					list[#list + 1] = { name = name, rank = rank, max = maxRank }
+				end
+			end
+		end
+	end
+	local ok = pcall(function()
+		Add(GetProfessions())
+	end)
+	return ok and list or nil
+end
+
+-- One client call under pcall, for a value the Characters tab shows: nil when the client lacks it or it fails.
+local function Read(fn, ...)
+	if type(fn) ~= "function" then
+		return nil
+	end
+	local ok, value, second = pcall(fn, ...)
+	if ok then
+		return value, second
+	end
+	return nil
+end
+
+-- Saves this character's scan for the Alts tab, and what the Characters tab shows of it, unless the player turned
+-- recording off.
 local function SaveSnapshot(scan)
 	if not HoardForeverDB.settings.recordAlts then
 		return
@@ -52,6 +90,11 @@ local function SaveSnapshot(scan)
 		previous.bankUpdated = previousUpdated
 	end
 	previous.updated = previous.bagsUpdated
+	previous.money = Read(GetMoney) or previous.money
+	previous.level = Read(UnitLevel, "player") or previous.level
+	previous.class = select(2, Read(UnitClass, "player")) or previous.class
+	previous.hearth = Read(GetBindLocation) or previous.hearth
+	previous.professions = Professions() or previous.professions
 	HoardForeverDB.chars[key] = previous
 end
 
@@ -140,11 +183,13 @@ local function Rebuild()
 		end
 	end
 	ns.index = ns.Model.Build(scan.records)
+	ns.byItem = ns.Model.ByItem(ns.index)
 	if ns.OnIndexReady then
 		ns.OnIndexReady()
 	end
 end
 ns.Rebuild = Rebuild
+ns.CharacterKey = CharacterKey
 
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("ADDON_LOADED")

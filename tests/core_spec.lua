@@ -90,9 +90,9 @@ end
 ns.Results.Render(list, { item55 })
 list.rows[1]:GetScript("OnEnter")(list.rows[1])
 assert(#lines == 1, "the tooltip should name the one alt stack, not this character's bags")
-assert(lines[1].left == "Arderin-TestRealm Bags 2", "the line should name the alt and its stack")
+assert(lines[1].left == "Arderin Bags 2", "the line should name the alt and its stack")
 assert(lines[1].right == "Updated 3d ago" and lines[1].r == 0.5, "the snapshot's age should show, dimmed")
-assert(ns.Results.Age(30) == "Updated just now" and ns.Results.Age(7200) == "Updated 2h ago", "ages read plainly")
+assert(ns.Tooltip.Age(30) == "Updated just now" and ns.Tooltip.Age(7200) == "Updated 2h ago", "ages read plainly")
 
 -- The window opens on the tab chosen in settings, and falls back to All for a value no tab has.
 local selected

@@ -9,8 +9,18 @@ sys.path.insert(0, str(ROOT / "tools"))
 from forever_tools import screens  # noqa: E402
 
 OUT = ROOT / "docs" / "screenshots"
-SOURCES = ("tools/screenshots.py", "UI/Window.lua", "UI/Results.lua", "Core/Model.lua")
-SCENES = {name: (lambda: screens.files(ROOT, SOURCES)) for name in ("search.png", "alts.png", "empty.png")}
+SOURCES = (
+    "tools/screenshots.py",
+    "UI/Window.lua",
+    "UI/Results.lua",
+    "UI/Characters.lua",
+    "UI/Tooltip.lua",
+    "Core/Model.lua",
+)
+SCENES = {
+    name: (lambda: screens.files(ROOT, SOURCES))
+    for name in ("search.png", "alts.png", "empty.png", "tooltip.png", "characters.png")
+}
 
 if __name__ == "__main__":
     raise SystemExit(screens.main(OUT, SCENES))
