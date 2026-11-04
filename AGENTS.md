@@ -4,6 +4,8 @@ Hoard Forever targets the WoW: Forever client (Interface 16001). It is the suite
 answers where an item is and how many you have, across bags, bank, alts and the guild vault. It only reads. It never
 moves, sells, mails or uses an item, and it never touches a protected function.
 
+Hoard Forever is retired in favour of Baganator (issue #50) and the repository is archived. Change nothing but the retirement notice.
+
 Read `docs/build-brief.md` for the product boundaries and the vault behavior before changing scope.
 
 ## Commands

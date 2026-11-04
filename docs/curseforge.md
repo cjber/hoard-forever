@@ -1,3 +1,5 @@
+> **Hoard Forever is retired and no longer maintained.** Use [Baganator](https://www.curseforge.com/wow/addons/baganator) instead: it searches your bags, bank and alts and shows item counts in tooltips. The last release keeps working for existing installs, but it gets no fixes or updates.
+
 Hoard Forever answers one question fast: where is that item? Type a name and it lists every place the item sits, on the character you are on and on every alt that has logged in since the addon was installed.
 
 The window is the game's own frame, search box and tabs.
