@@ -71,7 +71,7 @@ function Results.Render(parent, items)
 			row.sources:SetWordWrap(false)
 			row:SetScript("OnClick", function(self)
 				if IsShiftKeyDown() and self.item.link then
-					ChatEdit_InsertLink(self.item.link)
+					ChatFrameUtil.InsertLink(self.item.link)
 				end
 			end)
 			row:SetScript("OnEnter", ShowTooltip)

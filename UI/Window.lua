@@ -66,7 +66,7 @@ function ns.Open(query)
 		window.search:SetScript("OnEnterPressed", function(self)
 			local results = ns.Model.Query(ns.index or {}, self:GetText(), selectedTab)
 			if results[1] and results[1].link then
-				ChatEdit_InsertLink(results[1].link)
+				ChatFrameUtil.InsertLink(results[1].link)
 			end
 		end)
 		-- Rows live in a scroll child, so a search with more results than fit scrolls instead of drawing past the frame.
