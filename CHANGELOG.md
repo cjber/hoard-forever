@@ -4,6 +4,15 @@ All notable changes to this addon are recorded here. The format follows Keep a C
 
 ## [Unreleased]
 
+## [0.1.9] - 2026-11-04
+
+- **Item tooltips say where you have the item.** Every place Hoard has seen it, bags, bank, each alt and the guild vault, with the count in each, drawn through the game's own tooltip data. A setting turns the lines off.
+
+- **A Characters tab summarises every recorded character.** Gold, level, professions, hearth, bag and bank totals and when each character was last seen. Each character's snapshot now records those fields when it is saved.
+
+- **Shift-clicking a result links the item in chat again.** The link used a compatibility function that only exists while the game's deprecation fallbacks are enabled; it now uses the chat frame's own link insertion.
+
+
 - **Item tooltips say where the item is.** Hover an item anywhere and its tooltip lists your bags, bank, each alt and the guild vault with the count in each, so you know whether to fetch it without opening Hoard. Turn it off in the settings if another addon already does this.
 - **A Characters tab summarises your alts.** Each recorded character shows its gold, level, professions, hearth, bag and bank totals and when it was last played. A character fills these in the next time it logs in.
 
